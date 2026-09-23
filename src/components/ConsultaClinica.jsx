@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useClinica } from "../data/store";
-import { HOY } from "../utils/today";
+import { HOY, nowHHMM } from "../utils/today";
 import { formatLongDate } from "../utils/date";
 import { useDebouncedAutosave } from "../hooks/useDebouncedAutosave";
 import DocumentosEmision from "./DocumentosEmision";
@@ -29,11 +29,6 @@ const CAMPOS_VACIOS = {
   observaciones: "",
   vitales: { pa: "", fc: "", peso: "", au: "", lcf: "" },
 };
-
-function nowHHMM() {
-  const d = new Date();
-  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
-}
 
 // Indicador de color por tipo de documento asociado a la consulta
 // (plan.md §13.2: azul=exámenes, dorado=antecedentes, rosado=receta,

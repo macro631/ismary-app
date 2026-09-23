@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { nowHHMM } from "../utils/today";
 
 // Autoguardado con debounce: llama a `onSave(value)` `delay` ms después del
 // último cambio, y devuelve la hora del último guardado para mostrarla en
@@ -16,8 +17,7 @@ export function useDebouncedAutosave(value, onSave, delay = 900) {
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       onSave(value);
-      const now = new Date();
-      setSavedAt(`${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`);
+      setSavedAt(nowHHMM());
     }, delay);
     return () => clearTimeout(timer.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps

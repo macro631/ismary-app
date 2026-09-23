@@ -5,6 +5,7 @@ import {
   loadWebRequests,
   loadDocuments,
 } from "./mockData";
+import { nowHHMM } from "../utils/today";
 
 const ClinicaContext = createContext(null);
 
@@ -15,11 +16,6 @@ function persist(key, value) {
     // localStorage no disponible (modo privado, etc.) — el prototipo sigue
     // funcionando en memoria durante la sesión.
   }
-}
-
-function nowHHMM() {
-  const d = new Date();
-  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
 export function ClinicaProvider({ children }) {

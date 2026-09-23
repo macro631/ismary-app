@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { addDays, formatRangeLabel, getWeekDates, weekStart } from "../utils/date";
 import { loadPublishedWeeks, savePublishedWeeks } from "../utils/availability";
-import { HOY } from "../utils/today";
+import { HOY, nowHHMM } from "../utils/today";
 
 const SEMANAS_A_MOSTRAR = 5;
 
@@ -49,8 +49,7 @@ export default function ConfiguracionPage() {
       // ignorar si localStorage no está disponible
     }
     const t = setTimeout(() => {
-      const now = new Date();
-      setSavedAt(`${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`);
+      setSavedAt(nowHHMM());
     }, 500);
     return () => clearTimeout(t);
   }, [config]);
