@@ -17,6 +17,60 @@
   main > :last-child {
     margin-bottom: 0 !important;
   }
+
+  /*
+   * Tamaño del isotipo/wordmark: escala continua por ancho de ventana
+   * (clamp(mín, preferido-en-vw, máx)) en vez de dos tamaños fijos que
+   * saltan de golpe en el breakpoint md (768px). Cada variable interpola
+   * linealmente entre dos anclas "ancho de viewport -> tamaño"; fuera de
+   * ese rango se mantiene fija en el mínimo o el máximo. Para ajustar el
+   * tamaño en algún extremo, cambiar solo las anclas de abajo y recalcular
+   * pendiente/intercepto (pendiente = delta-tamaño / delta-viewport * 100).
+   *
+   * AppShell (app interna, con nav y botones a la derecha — verificado con
+   * Playwright en todo el rango 320-1920px):
+   *   header:  375px->96px   1440px->128px
+   *   icono:   320px->34px   1440px->84px  (a los 320px un iPhone SE/5 no
+   *            deja holgura para el nombre + botón de menú a la vez; se
+   *            achica el isotipo, no el nombre, para liberar esos ~14px)
+   *   img:     320px->27px   1440px->74px
+   *   nombre:  375px->38px   1440px->68px  (piso 38px verificado: es el
+   *            mínimo seguro para que quepa junto al botón de menú)
+   *   padding lateral del header: 320px->8px  375px->16px (se achica solo
+   *            en el tramo más angosto, libera ~8px más por lado)
+   */
+  :root {
+    --app-header-h: clamp(96px, 3.005vw + 84.733px, 128px);
+    --app-header-px: clamp(8px, 14.545vw - 38.545px, 16px);
+    --app-icon-shell: clamp(30px, 4.821vw + 14.570px, 84px);
+    --app-icon-img: clamp(24px, 4.464vw + 9.710px, 74px);
+    --app-wordmark-h: clamp(38px, 2.817vw + 27.437px, 68px);
+
+    /*
+     * PublicLayout (portal de reserva/login público — sin nav ni botones
+     * compitiendo por ancho, por eso puede crecer más que en AppShell):
+     *   icono:  375px->64px   1440px->110px
+     *   img:    375px->44px   1440px->78px
+     *   nombre: 375px->40px   1440px->84px
+     */
+    --public-icon-shell: clamp(64px, 4.319vw + 47.800px, 110px);
+    --public-icon-img: clamp(44px, 3.192vw + 32.030px, 78px);
+    --public-wordmark-h: clamp(40px, 4.131vw + 24.510px, 84px);
+
+    /*
+     * LoginPage: la tarjeta tiene max-w-sm (384px), así que el ancho
+     * disponible real es viewport-32px (padding) hasta ~416px de viewport,
+     * y de ahí en adelante queda fijo en 384px. Las anclas siguen ese
+     * mismo tramo (320px->416px) para que el logo crezca junto con la
+     * tarjeta y luego se mantenga estable, sin volver a evaluar el
+     * clamp por fuera de ese rango real de crecimiento:
+     *   icono:  320px->130px  416px->200px
+     *   nombre: 320px->46px   416px->62px (ancho resultante siempre por
+     *           debajo del ancho disponible de la tarjeta, con margen)
+     */
+    --login-icon-shell: clamp(130px, 72.920vw - 103.300px, 200px);
+    --login-wordmark-h: clamp(46px, 16.667vw - 7.330px, 62px);
+  }
 }
 
 ::-webkit-scrollbar {

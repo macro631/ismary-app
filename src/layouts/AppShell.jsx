@@ -16,20 +16,20 @@ export default function AppShell({ children }) {
   return (
     <div className="min-h-screen bg-surface">
       <header className="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-md shadow-[0_4px_20px_-4px_rgba(122,46,80,0.06)]">
-        <div className="h-24 md:h-32 w-full px-margin md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-2 md:gap-gutter">
+        <div className="h-[var(--app-header-h)] w-full px-[var(--app-header-px)] md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-2 md:gap-gutter">
           <div className="flex items-center gap-1 shrink-0 min-w-0 h-full py-2">
-            <div className="w-12 h-12 md:w-[80px] md:h-[80px] rounded-full bg-[#f7e6eb] border border-[#e2d3db] flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
-              <img src="logo/icono-color.svg" alt="Logo Ismary Ugalde" className="w-[38px] h-[38px] md:w-[72px] md:h-[72px] object-contain" />
+            <div className="w-[var(--app-icon-shell)] h-[var(--app-icon-shell)] rounded-full bg-[#f7e6eb] border border-[#e2d3db] flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+              <img src="logo/icono-color.svg" alt="Logo Ismary Ugalde" className="w-[var(--app-icon-img)] h-[var(--app-icon-img)] object-contain" />
             </div>
             <img
               src="logo/nombre-color.svg"
               alt="Ismary Ugalde Rojas"
-              className="h-[38px] md:h-[62px] w-auto object-contain min-w-0 shrink"
+              className="h-[var(--app-wordmark-h)] w-auto object-contain min-w-0 shrink"
               style={{ mixBlendMode: "multiply" }}
             />
           </div>
 
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden xl:flex items-center gap-6">
             {NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.to}
@@ -48,14 +48,14 @@ export default function AppShell({ children }) {
           </nav>
 
           <div className="flex items-center gap-1 sm:gap-3 shrink-0">
-            <div className="hidden sm:flex items-center gap-1.5 text-xs bg-[#f5f3f2] text-[#3d3d3d]/80 px-3 py-1.5 rounded-full border border-[#e2d3db]/50">
+            <div className="hidden xl:flex items-center gap-1.5 text-xs bg-[#f5f3f2] text-[#3d3d3d]/80 px-3 py-1.5 rounded-full border border-[#e2d3db]/50">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Autoguardado Activo</span>
             </div>
             <button
               type="button"
               aria-label="Notificaciones"
-              className="hidden md:inline-flex relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
+              className="hidden xl:inline-flex relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
             >
               <span className="material-symbols-outlined text-[20px]">notifications</span>
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
@@ -63,7 +63,7 @@ export default function AppShell({ children }) {
             <button
               type="button"
               onClick={() => navigate("/calendario")}
-              className="hidden lg:flex items-center gap-2 bg-primary hover:bg-[#682442] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition-all"
+              className="hidden xl:flex items-center gap-2 bg-primary hover:bg-[#682442] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition-all"
             >
               <span className="material-symbols-outlined text-[16px]">add</span>
               Nueva Cita / Atención
@@ -75,7 +75,7 @@ export default function AppShell({ children }) {
                 logout();
                 navigate("/login");
               }}
-              className="hidden md:flex w-8 h-8 rounded-full bg-[#f7e6eb] border border-[#e2d3db] text-primary items-center justify-center font-semibold text-xs shadow-sm hover:bg-primary hover:text-white transition-colors"
+              className="hidden xl:flex w-8 h-8 rounded-full bg-[#f7e6eb] border border-[#e2d3db] text-primary items-center justify-center font-semibold text-xs shadow-sm hover:bg-primary hover:text-white transition-colors"
             >
               IU
             </button>
@@ -83,7 +83,7 @@ export default function AppShell({ children }) {
               type="button"
               aria-label="Abrir menú"
               onClick={() => setMobileMenuOpen((v) => !v)}
-              className="md:hidden p-2 rounded-full text-primary hover:bg-surface-container transition-colors"
+              className="xl:hidden p-2 rounded-full text-primary hover:bg-surface-container transition-colors"
             >
               <span className="material-symbols-outlined text-[26px]">{mobileMenuOpen ? "close" : "menu"}</span>
             </button>
@@ -91,7 +91,7 @@ export default function AppShell({ children }) {
         </div>
 
         {mobileMenuOpen && (
-          <nav className="md:hidden border-t border-surface-container bg-surface-container-lowest px-margin py-space-sm flex flex-col">
+          <nav className="xl:hidden border-t border-surface-container bg-surface-container-lowest px-margin py-space-sm flex flex-col">
             {NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.to}
@@ -120,7 +120,7 @@ export default function AppShell({ children }) {
           </nav>
         )}
       </header>
-      <main className="w-full pt-24 md:pt-32 min-h-screen">{children}</main>
+      <main className="w-full pt-[var(--app-header-h)] min-h-screen">{children}</main>
     </div>
   );
 }

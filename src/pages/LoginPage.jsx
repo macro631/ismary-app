@@ -26,13 +26,13 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-sm">
         <div className="flex flex-col items-center gap-1 mb-1">
-          <div className="w-[200px] h-[200px] rounded-full bg-surface-container-lowest shadow-md flex items-center justify-center p-4">
+          <div className="w-[var(--login-icon-shell)] h-[var(--login-icon-shell)] rounded-full bg-surface-container-lowest shadow-md flex items-center justify-center p-4">
             <img src="logo/icono-color.svg" alt="Isotipo Ismary Ugalde" className="w-full h-full object-contain" />
           </div>
           <img
             src="logo/nombre-color.svg"
             alt="Ismary Ugalde Rojas"
-            className="h-[57px] w-auto object-contain"
+            className="h-[var(--login-wordmark-h)] w-auto object-contain"
             style={{ mixBlendMode: "multiply" }}
           />
         </div>
