@@ -196,35 +196,74 @@ function InformacionPrioritaria({ ultimaConsulta, proximaCita, solicitudesPendie
 // Información clínica permanente (plan.md §12.2): vive en el perfil, no se
 // pisa en cada consulta — a diferencia de la anamnesis puntual de un
 // control, esto es lo que se arrastra siempre (alergias, medicamentos
-// habituales, antecedentes).
+// habituales, antecedentes). No necesita quedar como formulario abierto en
+// cada visita a la ficha: se muestra colapsada (solo lo ya registrado) y se
+// abre a pedido con "Editar", para dejarle el protagonismo de la pantalla a
+// la Línea de Tiempo Clínica de abajo.
 function InfoPermanente({ patient, onSave }) {
+  const [editando, setEditando] = useState(false);
   const [campos, setCampos] = useState(() =>
     Object.fromEntries(CAMPOS_PERMANENTES.map(([key]) => [key, patient[key] || ""]))
   );
   const savedAt = useDebouncedAutosave(campos, onSave);
+  const camposConDatos = CAMPOS_PERMANENTES.filter(([key]) => campos[key]);
 
   return (
     <div className="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h2 className="font-headline-sm text-headline-sm text-primary">Información Clínica Permanente</h2>
-        <span className="text-body-sm bg-[#f5f3f2] text-[#3d3d3d]/80 px-3 py-1.5 rounded-full border border-[#e2d3db]/50 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          {savedAt ? `Guardado automáticamente ${savedAt}` : "Autoguardado activo"}
-        </span>
+        {editando ? (
+          <span className="text-body-sm bg-[#f5f3f2] text-[#3d3d3d]/80 px-3 py-1.5 rounded-full border border-[#e2d3db]/50 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            {savedAt ? `Guardado automáticamente ${savedAt}` : "Autoguardado activo"}
+          </span>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setEditando(true)}
+            className="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg hover:bg-surface-container-high transition-colors"
+          >
+            <span className="material-symbols-outlined text-[18px]">edit</span>
+            Editar
+          </button>
+        )}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
-        {CAMPOS_PERMANENTES.map(([key, label]) => (
-          <div key={key} className="space-y-1">
-            <label className="font-label-lg text-label-lg text-on-surface font-medium">{label}</label>
-            <input
-              value={campos[key]}
-              onChange={(e) => setCampos((c) => ({ ...c, [key]: e.target.value }))}
-              placeholder="Sin registrar"
-              className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+
+      {editando ? (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+            {CAMPOS_PERMANENTES.map(([key, label]) => (
+              <div key={key} className="space-y-1">
+                <label className="font-label-lg text-label-lg text-on-surface font-medium">{label}</label>
+                <input
+                  value={campos[key]}
+                  onChange={(e) => setCampos((c) => ({ ...c, [key]: e.target.value }))}
+                  placeholder="Sin registrar"
+                  className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+          <button
+            type="button"
+            onClick={() => setEditando(false)}
+            className="self-end px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-[#682442] transition-colors"
+          >
+            Listo
+          </button>
+        </>
+      ) : camposConDatos.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+          {camposConDatos.map(([key, label]) => (
+            <div key={key}>
+              <p className="font-label-md text-label-md text-secondary uppercase">{label}</p>
+              <p className="text-body-sm text-on-surface whitespace-pre-wrap">{campos[key]}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-body-sm text-on-surface-variant">Sin antecedentes registrados todavía.</p>
+      )}
     </div>
   );
 }
