@@ -1,0 +1,121 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useClinica } from "../data/store";
+
+export default function LoginPage() {
+  const { login } = useClinica();
+  const navigate = useNavigate();
+  const [rut, setRut] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [status, setStatus] = useState(null); // null | "checking"
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setStatus("checking");
+    setTimeout(() => {
+      login(rut || "15.420.918-K");
+      navigate("/calendario");
+    }, 500);
+  }
+
+  return (
+    <div className="min-h-screen bg-surface flex items-center justify-center p-margin relative overflow-hidden">
+      <div className="absolute -top-32 -left-20 w-96 h-96 rounded-full bg-primary-fixed opacity-40 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -right-20 w-[28rem] h-[28rem] rounded-full bg-secondary-container opacity-50 blur-3xl pointer-events-none" />
+
+      <div className="relative w-full max-w-sm">
+        <div className="flex flex-col items-center gap-1 mb-1">
+          <div className="w-[200px] h-[200px] rounded-full bg-surface-container-lowest shadow-md flex items-center justify-center p-4">
+            <img src="logo/icono-color.svg" alt="Isotipo Ismary Ugalde" className="w-full h-full object-contain" />
+          </div>
+          <img
+            src="logo/nombre-color.svg"
+            alt="Ismary Ugalde Rojas"
+            className="h-[57px] w-auto object-contain"
+            style={{ mixBlendMode: "multiply" }}
+          />
+        </div>
+
+        <div className="bg-surface-container-lowest rounded-xl shadow-xl p-space-lg">
+          <h1 className="font-headline-md text-headline-md text-primary text-center mb-1">Bienvenida</h1>
+          <p className="font-body-sm text-body-sm text-on-surface-variant text-center mb-space-lg">
+            Ingresa a tu calendario y fichas clínicas
+          </p>
+
+          <form className="space-y-space-md" onSubmit={handleSubmit}>
+            <div className="space-y-1.5">
+              <label className="font-label-lg text-label-lg text-on-surface font-medium" htmlFor="rutProfesional">
+                RUT
+              </label>
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-on-surface-variant material-symbols-outlined text-[20px] pointer-events-none">badge</span>
+                <input
+                  id="rutProfesional"
+                  value={rut}
+                  onChange={(e) => setRut(e.target.value)}
+                  className="w-full h-11 pl-10 pr-4 bg-surface-container-low text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                  placeholder="15.420.918-K"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="font-label-lg text-label-lg text-on-surface font-medium" htmlFor="claveProfesional">
+                  Contraseña
+                </label>
+                <a className="font-body-sm text-body-sm text-primary hover:underline" href="#">
+                  ¿Olvidaste tu contraseña?
+                </a>
+              </div>
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-on-surface-variant material-symbols-outlined text-[20px] pointer-events-none">key</span>
+                <input
+                  id="claveProfesional"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full h-11 pl-10 pr-12 bg-surface-container-low text-on-surface font-body-md text-body-md rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                  placeholder="••••••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  aria-label="Alternar visibilidad de contraseña"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 p-1 text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  <span className="material-symbols-outlined text-[20px]">
+                    {showPassword ? "visibility_off" : "visibility"}
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={status === "checking"}
+              className="w-full h-12 rounded-lg bg-primary-container hover:bg-[#682442] active:scale-[0.99] text-on-primary font-title-sm text-title-sm font-semibold shadow-md flex items-center justify-center gap-2 transition-all disabled:opacity-75"
+            >
+              <span className={`material-symbols-outlined text-[20px] ${status === "checking" ? "animate-spin" : ""}`}>
+                {status === "checking" ? "progress_activity" : "login"}
+              </span>
+              Ingresar
+            </button>
+          </form>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => navigate("/reserva")}
+          className="w-full mt-space-md flex items-center justify-center gap-1 text-on-surface-variant font-body-sm text-body-sm hover:text-primary transition-colors"
+        >
+          ¿Eres paciente y buscas reservar una hora?
+          <span className="font-semibold text-primary">Portal Pacientes</span>
+        </button>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,347 @@
+{
+  "schemaVersion": 1,
+  "id": "ismary-talonarios-a5",
+  "page": {
+    "format": "A5",
+    "widthMm": 148,
+    "heightMm": 210,
+    "renderDpi": 300
+  },
+  "palette": {
+    "navy": "#33305D",
+    "mauve": "#A34E88",
+    "rule": "#6C699D",
+    "pale": "#D5C5DF"
+  },
+  "brand": {
+    "name": "Ismary Ugalde Rojas",
+    "role": "Matrona",
+    "registration": "REG-SIS Nº: 802617",
+    "logo": {
+      "asset": "Logo/V6_nombre_color.png",
+      "vectorAsset": "Logo/V6_nombre_color.svg",
+      "xMm": 37.4,
+      "widthMm": 71.8,
+      "bottomMm": 24.5
+    },
+    "mother": {
+      "asset": "Talonarios/01_ilustraciones/01_figura_materna_transparente.png",
+      "boxMm": [
+        14,
+        4,
+        21.5,
+        39
+      ]
+    },
+    "leftSprig": {
+      "asset": "Talonarios/01_ilustraciones/06_ramita_superior_izquierda.png",
+      "boxMm": [
+        7,
+        17.5,
+        15,
+        24
+      ]
+    },
+    "uterus": {
+      "asset": "Talonarios/01_ilustraciones/Utero_con_ramito_integrado_v2_coherente.png",
+      "boxMm": [
+        107,
+        7.2,
+        34,
+        36
+      ]
+    },
+    "frameAsset": "Talonarios/03_ornamentos/07_marco_a5.png"
+  },
+  "contact": {
+    "email": "mt.ismary.ur@gmail.com",
+    "instagram": "ismary.matrona",
+    "topMm": 196
+  },
+  "documents": {
+    "recipe": {
+      "title": "RECETA",
+      "titleFontPt": 14.5,
+      "bandAsset": "Talonarios/03_ornamentos/04_banda_titulo_receta.png",
+      "titleHeartAsset": "Talonarios/03_ornamentos/01_corazon_relleno.png",
+      "waveAsset": "Talonarios/03_ornamentos/06_ondas_inferior_Receta.png",
+      "floralAsset": "Talonarios/01_ilustraciones/03_ornamento_esquina_izquierda.png",
+      "floralBoxMm": [
+        5,
+        164,
+        40,
+        41
+      ],
+      "signatureLineMm": [
+        92,
+        177.5,
+        136
+      ],
+      "signatureLabelMm": [
+        114,
+        179.1
+      ],
+      "contactShiftMm": 0,
+      "pdf": "ismary-receta-a5.pdf",
+      "backgroundPng": "receta-a5.png"
+    },
+    "exams": {
+      "title": "SOLICITUD DE EXÁMENES",
+      "titleFontPt": 14.5,
+      "bandAsset": "Talonarios/03_ornamentos/05_banda_titulo_examenes.png",
+      "titleHeartAsset": "Talonarios/03_ornamentos/02_corazon_lineal.png",
+      "waveAsset": "Talonarios/03_ornamentos/06_ondas_inferior_examen.png",
+      "floralAsset": "Talonarios/01_ilustraciones/04_ornamento_esquina_derecha.png",
+      "floralBoxMm": [
+        104,
+        164,
+        39,
+        42
+      ],
+      "signatureLineMm": [
+        14,
+        181,
+        60
+      ],
+      "signatureLabelMm": [
+        37,
+        182.6
+      ],
+      "contactShiftMm": -10,
+      "pdf": "ismary-examenes-a5.pdf",
+      "backgroundPng": "examenes-a5.png"
+    }
+  },
+  "layout": {
+    "recipe": {
+      "patient": [
+        29,
+        64.7,
+        107,
+        5
+      ],
+      "rut": [
+        23,
+        72.7,
+        55,
+        5
+      ],
+      "date": [
+        97,
+        72.7,
+        39,
+        5
+      ],
+      "age": [
+        25,
+        80.7,
+        15,
+        5
+      ],
+      "patientAddress": [
+        66,
+        80.7,
+        70,
+        5
+      ],
+      "diagnosis": [
+        38,
+        88.7,
+        98,
+        5
+      ],
+      "prescription": [
+        28,
+        100.7,
+        108,
+        35
+      ],
+      "indications": [
+        13,
+        141.7,
+        123,
+        21
+      ],
+      "folio": [
+        104,
+        58.8,
+        32,
+        5
+      ]
+    },
+    "exams": {
+      "patient": [
+        29,
+        64.7,
+        107,
+        5
+      ],
+      "rut": [
+        23,
+        72.7,
+        54,
+        5
+      ],
+      "age": [
+        96,
+        72.7,
+        40,
+        5
+      ],
+      "birthDate": [
+        28,
+        80.7,
+        49,
+        5
+      ],
+      "date": [
+        97,
+        80.7,
+        39,
+        5
+      ],
+      "patientAddress": [
+        34,
+        88.7,
+        102,
+        5
+      ],
+      "examList": [
+        14,
+        110,
+        120,
+        45
+      ],
+      "observations": [
+        13,
+        164.5,
+        123,
+        5
+      ],
+      "folio": [
+        104,
+        58.8,
+        32,
+        5
+      ]
+    }
+  },
+  "examList": {
+    "selectedOnly": true,
+    "showCheckbox": true,
+    "columns": 2,
+    "allowCustom": true
+  },
+  "examCatalog": [
+    {
+      "category": "Hematología",
+      "exams": [
+        "Hemograma",
+        "Hematocrito",
+        "Hemoglobina",
+        "Grupo y Rh",
+        "Recuento de plaquetas",
+        "Recuento de reticulocitos",
+        "Protrombina",
+        "TTPK",
+        "Test Coombs directo",
+        "Test Coombs indirecto",
+        "Pruebas de coagulación",
+        "Hemoglobina glicosilada",
+        "Cinética de hierro",
+        "Ferritina"
+      ]
+    },
+    {
+      "category": "Bioquímicos",
+      "exams": [
+        "Bilirrubina total y conjugada",
+        "Glicemia",
+        "PTGO",
+        "Albúmina",
+        "Proteínas totales",
+        "LDH",
+        "Vitamina B12",
+        "25-hidroxivitamina D",
+        "Creatinina",
+        "Fósforo",
+        "Calcio",
+        "Magnesio",
+        "Electrolitos plasmáticos",
+        "Fosfatasas alcalinas",
+        "Transaminasas GOT/GPT",
+        "Triglicéridos",
+        "Colesterol",
+        "Perfil lipídico (colesterol, HDL, LDL, triglicéridos)",
+        "Perfil hepático (bilirrubina, GOT/AST, GPT/ALT, fosfatasas alcalinas, GGT, albúmina)",
+        "Perfil renal (BUN, creatinina, TFG, electrolitos plasmáticos)"
+      ]
+    },
+    {
+      "category": "Orina",
+      "exams": [
+        "Orina completa",
+        "Sedimento de orina",
+        "Urocultivo",
+        "Creatinina en orina (24 hrs)",
+        "Proteinuria",
+        "Creatinina aislada"
+      ]
+    },
+    {
+      "category": "Hormonales",
+      "exams": [
+        "Estradiol",
+        "β-hCG",
+        "FSH",
+        "LH",
+        "Prolactina",
+        "Progesterona",
+        "Testosterona total",
+        "Testosterona libre",
+        "AMH (antimulleriana)",
+        "TSH",
+        "T3",
+        "T4",
+        "T4 libre",
+        "Insulina",
+        "DHEAS",
+        "SHGB",
+        "Cortisol",
+        "HOMA-IR"
+      ]
+    },
+    {
+      "category": "Microbiológicos",
+      "exams": [
+        "Cultivo corriente",
+        "Antibiograma",
+        "Cultivo de hongos",
+        "Cultivo de levaduras",
+        "Coprocultivo",
+        "Chagas",
+        "Mycoplasma urogenital",
+        "Clamidia",
+        "Cultivo para gonococo",
+        "Cultivo vaginal",
+        "Papanicolau",
+        "Prueba de VPH",
+        "Flujo vaginal",
+        "PCR ITS"
+      ]
+    },
+    {
+      "category": "Serológicos",
+      "exams": [
+        "VDRL",
+        "VIH",
+        "Hepatitis A Anti IgM",
+        "Hepatitis B Anti core IgM",
+        "Hepatitis B Ag superficie",
+        "Hepatitis C anticuerpo anti",
+        "Proteína C reactiva cualitativa",
+        "Proteína C reactiva (PCR)"
+      ]
+    }
+  ]
+}

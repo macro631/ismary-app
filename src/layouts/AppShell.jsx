@@ -1,0 +1,126 @@
+import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useClinica } from "../data/store";
+
+const NAV_ITEMS = [
+  { to: "/calendario", label: "Calendario" },
+  { to: "/fichas", label: "Fichas Clínicas" },
+  { to: "/configuracion", label: "Configuración" },
+];
+
+export default function AppShell({ children }) {
+  const { logout } = useClinica();
+  const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-surface">
+      <header className="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-md shadow-[0_4px_20px_-4px_rgba(122,46,80,0.06)]">
+        <div className="h-24 md:h-32 w-full px-margin md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-2 md:gap-gutter">
+          <div className="flex items-center gap-1 shrink-0 min-w-0 h-full py-2">
+            <div className="w-12 h-12 md:w-[80px] md:h-[80px] rounded-full bg-[#f7e6eb] border border-[#e2d3db] flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+              <img src="logo/icono-color.svg" alt="Logo Ismary Ugalde" className="w-[38px] h-[38px] md:w-[72px] md:h-[72px] object-contain" />
+            </div>
+            <img
+              src="logo/nombre-color.svg"
+              alt="Ismary Ugalde Rojas"
+              className="h-[38px] md:h-[62px] w-auto object-contain min-w-0 shrink"
+              style={{ mixBlendMode: "multiply" }}
+            />
+          </div>
+
+          <nav className="hidden md:flex items-center gap-6">
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `text-sm tracking-wide font-medium transition-colors pb-1 border-b-2 ${
+                    isActive
+                      ? "text-primary font-semibold border-primary"
+                      : "text-[#3d3d3d]/70 hover:text-primary border-transparent"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-1 sm:gap-3 shrink-0">
+            <div className="hidden sm:flex items-center gap-1.5 text-xs bg-[#f5f3f2] text-[#3d3d3d]/80 px-3 py-1.5 rounded-full border border-[#e2d3db]/50">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Autoguardado Activo</span>
+            </div>
+            <button
+              type="button"
+              aria-label="Notificaciones"
+              className="hidden md:inline-flex relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
+            >
+              <span className="material-symbols-outlined text-[20px]">notifications</span>
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/calendario")}
+              className="hidden lg:flex items-center gap-2 bg-primary hover:bg-[#682442] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition-all"
+            >
+              <span className="material-symbols-outlined text-[16px]">add</span>
+              Nueva Cita / Atención
+            </button>
+            <button
+              type="button"
+              title="Cerrar sesión"
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+              className="hidden md:flex w-8 h-8 rounded-full bg-[#f7e6eb] border border-[#e2d3db] text-primary items-center justify-center font-semibold text-xs shadow-sm hover:bg-primary hover:text-white transition-colors"
+            >
+              IU
+            </button>
+            <button
+              type="button"
+              aria-label="Abrir menú"
+              onClick={() => setMobileMenuOpen((v) => !v)}
+              className="md:hidden p-2 rounded-full text-primary hover:bg-surface-container transition-colors"
+            >
+              <span className="material-symbols-outlined text-[26px]">{mobileMenuOpen ? "close" : "menu"}</span>
+            </button>
+          </div>
+        </div>
+
+        {mobileMenuOpen && (
+          <nav className="md:hidden border-t border-surface-container bg-surface-container-lowest px-margin py-space-sm flex flex-col">
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                onClick={() => setMobileMenuOpen(false)}
+                className={({ isActive }) =>
+                  `py-space-sm text-body-lg font-medium border-b border-surface-container last:border-b-0 ${
+                    isActive ? "text-primary font-semibold" : "text-on-surface"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+              className="py-space-sm text-body-lg font-medium text-status-cancelada text-left flex items-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[20px]">logout</span>
+              Cerrar sesión
+            </button>
+          </nav>
+        )}
+      </header>
+      <main className="w-full pt-24 md:pt-32 min-h-screen">{children}</main>
+    </div>
+  );
+}
