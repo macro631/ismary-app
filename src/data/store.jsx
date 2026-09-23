@@ -130,6 +130,18 @@ export function ClinicaProvider({ children }) {
           )
         );
       },
+      // Solo aplica a un borrador (uno en curso, nunca finalizado): se
+      // elimina por completo en vez de marcarse como "cancelada", porque un
+      // borrador abierto por error no tiene valor como registro clínico.
+      deleteConsulta(patientId, consultaId) {
+        setPatients((prev) =>
+          prev.map((p) =>
+            p.id === patientId
+              ? { ...p, consultas: (p.consultas || []).filter((c) => c.id !== consultaId) }
+              : p
+          )
+        );
+      },
       deletePatient(patientId) {
         setPatients((prev) => prev.filter((p) => p.id !== patientId));
         setAppointments((prev) => prev.filter((a) => a.pacienteId !== patientId));

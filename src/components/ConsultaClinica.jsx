@@ -133,7 +133,7 @@ function CampoTexto({ label, value, onChange, rows = 2, placeholder }) {
 // cambia el borrador vigente, para no arrastrar estado local de una
 // consulta a otra.
 function ConsultaForm({ paciente, borrador, onCerrar }) {
-  const { updateConsulta, finalizarConsulta } = useClinica();
+  const { updateConsulta, finalizarConsulta, deleteConsulta } = useClinica();
   const [campos, setCampos] = useState({
     tipo: borrador.tipo,
     modalidad: borrador.modalidad,
@@ -149,6 +149,7 @@ function ConsultaForm({ paciente, borrador, onCerrar }) {
     vitales: borrador.vitales || CAMPOS_VACIOS.vitales,
   });
   const [showDocumentos, setShowDocumentos] = useState(false);
+  const [confirmandoCancelar, setConfirmandoCancelar] = useState(false);
 
   const savedAt = useDebouncedAutosave(campos, (value) => {
     updateConsulta(paciente.id, borrador.id, value);
@@ -174,6 +175,10 @@ function ConsultaForm({ paciente, borrador, onCerrar }) {
   function finalizar() {
     updateConsulta(paciente.id, borrador.id, campos);
     finalizarConsulta(paciente.id, borrador.id);
+    onCerrar();
+  }
+  function cancelarConsulta() {
+    deleteConsulta(paciente.id, borrador.id);
     onCerrar();
   }
 
@@ -269,6 +274,14 @@ function ConsultaForm({ paciente, borrador, onCerrar }) {
           <span className="material-symbols-outlined text-[18px]">prescriptions</span>
           Emitir Receta / Solicitud
         </button>
+        <button
+          type="button"
+          onClick={() => setConfirmandoCancelar(true)}
+          className="flex items-center gap-1.5 px-space-md py-2 rounded-lg text-status-cancelada font-label-lg text-label-lg hover:bg-status-cancelada-bg transition-colors"
+        >
+          <span className="material-symbols-outlined text-[18px]">delete</span>
+          Cancelar Consulta
+        </button>
         <div className="flex-1" />
         <button
           type="button"
@@ -309,6 +322,37 @@ function ConsultaForm({ paciente, borrador, onCerrar }) {
             </div>
             <div className="p-space-md">
               <DocumentosEmision paciente={paciente} consultaId={borrador.id} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmandoCancelar && (
+        <div
+          className="fixed inset-0 z-[70] bg-black/40 flex items-center justify-center p-4"
+          onClick={() => setConfirmandoCancelar(false)}
+        >
+          <div
+            className="bg-surface-container-lowest rounded-xl shadow-xl max-w-sm w-full p-space-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="font-headline-sm text-headline-sm text-primary mb-space-sm">¿Cancelar esta consulta?</h2>
+            <p className="text-body-md text-on-surface-variant">
+              Se eliminará este borrador junto con todo lo escrito en él. Esta acción no se puede deshacer.
+            </p>
+            <div className="flex flex-col gap-space-sm mt-space-md">
+              <button
+                onClick={cancelarConsulta}
+                className="w-full h-11 rounded-lg bg-status-cancelada text-white font-title-sm text-title-sm font-semibold"
+              >
+                Sí, cancelar y eliminar
+              </button>
+              <button
+                onClick={() => setConfirmandoCancelar(false)}
+                className="w-full text-body-sm text-on-surface-variant hover:text-on-surface"
+              >
+                Volver a la consulta
+              </button>
             </div>
           </div>
         </div>
