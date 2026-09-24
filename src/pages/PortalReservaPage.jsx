@@ -12,6 +12,7 @@ import {
   maskName,
   isMaskedValue,
 } from "../utils/rut";
+import HojaTalonario from "../components/HojaTalonario";
 import { findPossibleDuplicate } from "../utils/duplicates";
 import { loadPublishedWeeks, isWeekPublished } from "../utils/availability";
 
@@ -220,9 +221,7 @@ export default function PortalReservaPage() {
     <div className="w-full max-w-3xl">
       {step !== "confirmacion" && <StepIndicator pasoActual={pasoActual} />}
 
-      <div className="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden">
-        <div className="h-1.5 bg-gradient-to-r from-primary via-primary-container to-[#dfc587]" />
-
+      <HojaTalonario>
         <div className="p-space-lg">
         {step === "rut" && (
           <>
@@ -531,7 +530,7 @@ export default function PortalReservaPage() {
           </div>
         )}
         </div>
-      </div>
+      </HojaTalonario>
     </div>
   );
 }
@@ -543,7 +542,7 @@ function StepIndicator({ pasoActual }) {
         const completado = i < pasoActual;
         const activo = i === pasoActual;
         return (
-          <li key={p.key} className="flex-1 flex flex-col items-center gap-1">
+          <li key={p.key} aria-current={activo ? "step" : undefined} className="flex-1 flex flex-col items-center gap-1">
             <span
               className={`w-8 h-8 rounded-full flex items-center justify-center font-label-lg text-label-lg font-semibold transition-colors ${
                 completado || activo ? "bg-primary text-on-primary" : "bg-surface-container-high text-on-surface-variant"

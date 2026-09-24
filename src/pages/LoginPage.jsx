@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useClinica } from "../data/store";
+import HojaTalonario from "../components/HojaTalonario";
 
 export default function LoginPage() {
   const { login } = useClinica();
@@ -20,9 +21,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-margin relative overflow-hidden">
-      <div className="absolute -top-32 -left-20 w-96 h-96 rounded-full bg-primary-fixed opacity-40 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -right-20 w-[28rem] h-[28rem] rounded-full bg-secondary-container opacity-50 blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-brand-soft flex items-center justify-center p-margin relative overflow-hidden">
 
       <div className="relative w-full max-w-sm">
         <div className="flex flex-col items-center gap-1 mb-1">
@@ -37,7 +36,8 @@ export default function LoginPage() {
           />
         </div>
 
-        <div className="bg-surface-container-lowest rounded-xl shadow-xl p-space-lg">
+        <HojaTalonario>
+        <div className="p-space-lg">
           <h1 className="font-headline-md text-headline-md text-primary text-center mb-1">Bienvenida</h1>
           <p className="font-body-sm text-body-sm text-on-surface-variant text-center mb-space-lg">
             Ingresa a tu calendario y fichas clínicas
@@ -106,15 +106,18 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
+        </HojaTalonario>
 
-        <button
-          type="button"
-          onClick={() => navigate("/reserva")}
-          className="w-full mt-space-md flex items-center justify-center gap-1 text-on-surface-variant font-body-sm text-body-sm hover:text-primary transition-colors"
-        >
-          ¿Eres paciente y buscas reservar una hora?
-          <span className="font-semibold text-primary">Portal Pacientes</span>
-        </button>
+        <p className="relative mt-12 md:mt-20 text-center text-on-surface-variant font-body-sm text-body-sm">
+          ¿Eres paciente?{" "}
+          <button
+            type="button"
+            onClick={() => navigate("/reserva")}
+            className="font-semibold text-primary underline-offset-4 hover:underline"
+          >
+            Reserva tu hora
+          </button>
+        </p>
       </div>
     </div>
   );
