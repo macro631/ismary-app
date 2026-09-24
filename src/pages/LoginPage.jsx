@@ -21,7 +21,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-soft flex items-center justify-center p-margin relative overflow-hidden">
+    <main className="min-h-screen bg-brand-soft flex items-center justify-center p-margin relative overflow-hidden">
 
       <div className="relative w-full max-w-sm">
         <div className="flex flex-col items-center gap-1 mb-1">
@@ -119,6 +119,6 @@ export default function LoginPage() {
           </button>
         </p>
       </div>
-    </div>
+    </main>
   );
 }

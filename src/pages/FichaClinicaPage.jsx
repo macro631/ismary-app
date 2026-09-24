@@ -233,15 +233,15 @@ function InfoPermanente({ patient, onSave }) {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
             {CAMPOS_PERMANENTES.map(([key, label]) => (
-              <div key={key} className="space-y-1">
-                <label className="font-label-lg text-label-lg text-on-surface font-medium">{label}</label>
+              <label key={key} className="block space-y-1">
+                <span className="block font-label-lg text-label-lg text-on-surface font-medium">{label}</span>
                 <input
                   value={campos[key]}
                   onChange={(e) => setCampos((c) => ({ ...c, [key]: e.target.value }))}
                   placeholder="Sin registrar"
                   className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
                 />
-              </div>
+              </label>
             ))}
           </div>
           <button
@@ -310,6 +310,7 @@ function AntecedentesAdjuntos({ patient, onAdd, onRemove }) {
       </div>
       <div className="flex flex-col gap-space-sm">
         <select
+          aria-label="Tipo de antecedente"
           value={tipo}
           onChange={(e) => setTipo(e.target.value)}
           className="h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"

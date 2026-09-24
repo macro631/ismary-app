@@ -302,28 +302,28 @@ function SolicitudExamenes({ paciente, documents, consultaId, upsertDocument, em
           ))}
         </div>
 
-        <div className="space-y-1">
-          <label className="font-label-lg text-label-lg text-on-surface font-medium">Otros exámenes (uno por línea)</label>
+        <label className="block space-y-1">
+          <span className="block font-label-lg text-label-lg text-on-surface font-medium">Otros exámenes (uno por línea)</span>
           <textarea disabled={bloqueado} value={otros} onChange={(e) => setOtros(e.target.value)} rows={2} className="w-full px-3 py-2 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
-        </div>
-        <div className="space-y-1">
-          <label className="font-label-lg text-label-lg text-on-surface font-medium">Domicilio de la paciente</label>
+        </label>
+        <label className="block space-y-1">
+          <span className="block font-label-lg text-label-lg text-on-surface font-medium">Domicilio de la paciente</span>
           <input disabled={bloqueado} maxLength={62} value={domicilioPaciente} onChange={(e) => setDomicilioPaciente(e.target.value)} className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
           <ContadorCaracteres value={domicilioPaciente} max={62} />
-        </div>
-        <div className="space-y-1">
-          <label className="font-label-lg text-label-lg text-on-surface font-medium">Diagnóstico de sospecha (CIE-10)</label>
+        </label>
+        <label className="block space-y-1">
+          <span className="block font-label-lg text-label-lg text-on-surface font-medium">Diagnóstico de sospecha (CIE-10)</span>
           <input disabled={bloqueado} value={diagnostico} onChange={(e) => setDiagnostico(e.target.value)} className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
-        </div>
-        <div className="space-y-1">
-          <label className="font-label-lg text-label-lg text-on-surface font-medium">Justificación clínica</label>
+        </label>
+        <label className="block space-y-1">
+          <span className="block font-label-lg text-label-lg text-on-surface font-medium">Justificación clínica</span>
           <textarea disabled={bloqueado} value={justificacion} onChange={(e) => setJustificacion(e.target.value)} rows={2} className="w-full px-3 py-2 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
-        </div>
-        <div className="space-y-1">
-          <label className="font-label-lg text-label-lg text-on-surface font-medium">Observaciones para el talonario A5</label>
+        </label>
+        <label className="block space-y-1">
+          <span className="block font-label-lg text-label-lg text-on-surface font-medium">Observaciones para el talonario A5</span>
           <textarea disabled={bloqueado} maxLength={80} value={observaciones} onChange={(e) => setObservaciones(e.target.value)} rows={2} className="w-full px-3 py-2 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
           <ContadorCaracteres value={observaciones} max={80} />
-        </div>
+        </label>
         <p className="text-body-sm text-on-surface-variant">El diagnóstico y la justificación quedan registrados en la ficha. En el talonario aparecen los exámenes y las observaciones.</p>
 
         {!bloqueado && (
@@ -437,22 +437,22 @@ function RecetaDigital({ paciente, documents, consultaId, upsertDocument, emitir
 
         {medicamentos.map((m, i) => (
           <div key={i} className="grid grid-cols-2 sm:grid-cols-5 gap-2 items-end border-b border-surface-container pb-space-sm">
-            <div className="col-span-2 sm:col-span-1 space-y-1">
-              <label className="text-label-md font-label-md text-on-surface-variant">DCI / Medicamento</label>
+            <label className="block col-span-2 sm:col-span-1 space-y-1">
+              <span className="block text-label-md font-label-md text-on-surface-variant">DCI / Medicamento</span>
               <input disabled={bloqueado} value={m.dci} onChange={(e) => updateMed(i, "dci", e.target.value)} placeholder="Ácido fólico" className="w-full h-9 px-2 bg-surface-container-low rounded-lg text-body-sm disabled:opacity-60" />
-            </div>
-            <div className="space-y-1">
-              <label className="text-label-md font-label-md text-on-surface-variant">Dosis</label>
+            </label>
+            <label className="block space-y-1">
+              <span className="block text-label-md font-label-md text-on-surface-variant">Dosis</span>
               <input disabled={bloqueado} value={m.dosis} onChange={(e) => updateMed(i, "dosis", e.target.value)} placeholder="1 mg" className="w-full h-9 px-2 bg-surface-container-low rounded-lg text-body-sm disabled:opacity-60" />
-            </div>
-            <div className="space-y-1">
-              <label className="text-label-md font-label-md text-on-surface-variant">Posología</label>
+            </label>
+            <label className="block space-y-1">
+              <span className="block text-label-md font-label-md text-on-surface-variant">Posología</span>
               <input disabled={bloqueado} value={m.posologia} onChange={(e) => updateMed(i, "posologia", e.target.value)} placeholder="1 vez al día" className="w-full h-9 px-2 bg-surface-container-low rounded-lg text-body-sm disabled:opacity-60" />
-            </div>
-            <div className="space-y-1">
-              <label className="text-label-md font-label-md text-on-surface-variant">Días</label>
+            </label>
+            <label className="block space-y-1">
+              <span className="block text-label-md font-label-md text-on-surface-variant">Días</span>
               <input disabled={bloqueado} value={m.dias} onChange={(e) => updateMed(i, "dias", e.target.value)} placeholder="30" className="w-full h-9 px-2 bg-surface-container-low rounded-lg text-body-sm disabled:opacity-60" />
-            </div>
+            </label>
             {!bloqueado && (
               <button onClick={() => removeMed(i)} className="text-status-cancelada text-body-sm hover:underline">Quitar</button>
             )}
@@ -465,20 +465,20 @@ function RecetaDigital({ paciente, documents, consultaId, upsertDocument, emitir
           </button>
         )}
 
-        <div className="space-y-1">
-          <label className="font-label-lg text-label-lg text-on-surface font-medium">Diagnóstico (CIE-10)</label>
+        <label className="block space-y-1">
+          <span className="block font-label-lg text-label-lg text-on-surface font-medium">Diagnóstico (CIE-10)</span>
           <input disabled={bloqueado} maxLength={65} value={diagnostico} onChange={(e) => setDiagnostico(e.target.value)} className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
           <ContadorCaracteres value={diagnostico} max={65} />
-        </div>
-        <div className="space-y-1">
-          <label className="font-label-lg text-label-lg text-on-surface font-medium">Domicilio de la paciente</label>
+        </label>
+        <label className="block space-y-1">
+          <span className="block font-label-lg text-label-lg text-on-surface font-medium">Domicilio de la paciente</span>
           <input disabled={bloqueado} maxLength={44} value={domicilioPaciente} onChange={(e) => setDomicilioPaciente(e.target.value)} className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
           <ContadorCaracteres value={domicilioPaciente} max={44} />
-        </div>
-        <div className="space-y-1">
-          <label className="font-label-lg text-label-lg text-on-surface font-medium">Indicaciones para el talonario A5</label>
+        </label>
+        <label className="block space-y-1">
+          <span className="block font-label-lg text-label-lg text-on-surface font-medium">Indicaciones para el talonario A5</span>
           <textarea disabled={bloqueado} value={observaciones} onChange={(e) => setObservaciones(e.target.value)} rows={2} className="w-full px-3 py-2 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
-        </div>
+        </label>
 
         {!bloqueado && (
           <>

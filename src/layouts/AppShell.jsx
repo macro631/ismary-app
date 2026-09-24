@@ -38,7 +38,7 @@ export default function AppShell({ children }) {
                   `text-sm tracking-wide font-medium transition-colors pb-1 border-b-2 ${
                     isActive
                       ? "text-primary font-semibold border-primary"
-                      : "text-text-primary/70 hover:text-primary border-transparent"
+                      : "text-on-surface-variant hover:text-primary border-transparent"
                   }`
                 }
               >

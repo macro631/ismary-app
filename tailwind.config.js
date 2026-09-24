@@ -60,9 +60,9 @@ export default {
         "border-subtle": "#e2d3db",
         "text-primary": "#3d3d3d",
         // Clinical status codes (from DESIGN.md, used as flat utilities e.g. bg-status-confirmada)
-        "status-confirmada": "#2E7D5A",
+        "status-confirmada": "#24704F", // 5.4:1 sobre su fondo (WCAG AA)
         "status-confirmada-bg": "#EAF5F0",
-        "status-pendiente": "#B57A22",
+        "status-pendiente": "#8A5A12", // 5.5:1 sobre su fondo (WCAG AA)
         "status-pendiente-bg": "#FCF6E8",
         "status-reprogramada": "#3E6B99",
         "status-reprogramada-bg": "#EDF4FA",

@@ -188,8 +188,8 @@ export default function ConfiguracionPage() {
       <section className="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
         <h2 className="font-headline-sm text-headline-sm text-primary">Parámetros de respaldo y seguridad</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm items-end">
-          <div className="space-y-1">
-            <label className="font-label-lg text-label-lg text-on-surface font-medium">Cierre de sesión por inactividad</label>
+          <label className="block space-y-1">
+            <span className="block font-label-lg text-label-lg text-on-surface font-medium">Cierre de sesión por inactividad</span>
             <select
               value={config.timeoutInactividad}
               onChange={(e) => setConfig((c) => ({ ...c, timeoutInactividad: e.target.value }))}
@@ -199,7 +199,7 @@ export default function ConfiguracionPage() {
                 <option key={m} value={m}>{m} minutos</option>
               ))}
             </select>
-          </div>
+          </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -217,14 +217,14 @@ export default function ConfiguracionPage() {
 
 function Campo({ label, value, onChange, type = "text" }) {
   return (
-    <div className="space-y-1">
-      <label className="font-label-lg text-label-lg text-on-surface font-medium">{label}</label>
+    <label className="block space-y-1">
+      <span className="block font-label-lg text-label-lg text-on-surface font-medium">{label}</span>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
       />
-    </div>
+    </label>
   );
 }

@@ -116,8 +116,8 @@ function ConsultaCard({ consulta, documentosVinculados }) {
 
 function CampoTexto({ label, value, onChange, rows = 2, placeholder }) {
   return (
-    <div className="space-y-1">
-      <label className="font-label-lg text-label-lg text-on-surface font-medium">{label}</label>
+    <label className="block space-y-1">
+      <span className="block font-label-lg text-label-lg text-on-surface font-medium">{label}</span>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -125,7 +125,7 @@ function CampoTexto({ label, value, onChange, rows = 2, placeholder }) {
         placeholder={placeholder}
         className="w-full px-3 py-2 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
       />
-    </div>
+    </label>
   );
 }
 
@@ -230,29 +230,29 @@ function ConsultaForm({ paciente, borrador, onCerrar }) {
             ["au", "AU (cm)", "30"],
             ["lcf", "LCF (lpm)", "142"],
           ].map(([key, label, placeholder]) => (
-            <div key={key} className="space-y-1">
-              <label className="font-label-lg text-label-lg text-on-surface font-medium">{label}</label>
+            <label key={key} className="block space-y-1">
+              <span className="block font-label-lg text-label-lg text-on-surface font-medium">{label}</span>
               <input
                 value={campos.vitales[key] || ""}
                 onChange={(e) => vital(key, e.target.value)}
                 placeholder={placeholder}
                 className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
               />
-            </div>
+            </label>
           ))}
         </div>
       </div>
 
       <CampoTexto label="Evaluación y hallazgos" value={campos.evaluacion} onChange={(v) => campo("evaluacion", v)} rows={3} />
-      <div className="space-y-1">
-        <label className="font-label-lg text-label-lg text-on-surface font-medium">Impresión clínica o diagnóstico (CIE-10 sugerido)</label>
+      <label className="block space-y-1">
+        <span className="block font-label-lg text-label-lg text-on-surface font-medium">Impresión clínica o diagnóstico (CIE-10 sugerido)</span>
         <input
           value={campos.diagnostico}
           onChange={(e) => campo("diagnostico", e.target.value)}
           placeholder="Ej: Z34.8 — Control de otro embarazo normal"
           className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
         />
-      </div>
+      </label>
       <CampoTexto label="Indicaciones y educación entregada" value={campos.indicaciones} onChange={(v) => campo("indicaciones", v)} rows={3} />
 
       <details className="rounded-lg border border-surface-container bg-surface-container-low p-space-sm">

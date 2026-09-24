@@ -663,8 +663,8 @@ function RutInput({ value, onChange }) {
   }
 
   return (
-    <div className="space-y-1">
-      <label className="font-label-lg text-label-lg text-on-surface font-medium">RUT</label>
+    <label className="block space-y-1">
+      <span className="block font-label-lg text-label-lg text-on-surface font-medium">RUT</span>
       <input
         ref={inputRef}
         value={value}
@@ -674,14 +674,14 @@ function RutInput({ value, onChange }) {
         inputMode="text"
         className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
       />
-    </div>
+    </label>
   );
 }
 
 function Campo({ label, value, onChange, type = "text", placeholder, required = false, cursorAlFinalAlEnfocar = false }) {
   return (
-    <div className="space-y-1">
-      <label className="font-label-lg text-label-lg text-on-surface font-medium">{label}</label>
+    <label className="block space-y-1">
+      <span className="block font-label-lg text-label-lg text-on-surface font-medium">{label}</span>
       <input
         type={type}
         value={value}
@@ -698,6 +698,6 @@ function Campo({ label, value, onChange, type = "text", placeholder, required = 
         }
         className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
       />
-    </div>
+    </label>
   );
 }

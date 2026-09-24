@@ -134,9 +134,9 @@ export default function CalendarioPage() {
                 <span className="material-symbols-outlined text-[18px]">chevron_right</span>
               </button>
               <div className="ml-space-xs flex items-baseline gap-space-xs">
-                <span className="font-headline-sm text-headline-sm text-primary">
+                <h1 className="font-headline-sm text-headline-sm text-primary">
                   {view === "dia" ? formatLongDate(anchorDate) : formatRangeLabel(weekDates)}
-                </span>
+                </h1>
                 <span className="hidden sm:inline font-code-clinical text-code-clinical text-secondary">Semana {weekNumber(anchorDate)}</span>
               </div>
             </div>
@@ -443,24 +443,24 @@ function CitaDetalleModal({ cita, paciente, onClose, onVerFicha, onUpdateAppoint
             <h2 className="font-headline-sm text-headline-sm text-primary mb-space-sm">Reprogramar cita</h2>
             <p className="text-body-sm text-on-surface-variant mb-space-sm">{paciente?.nombre} · {cita.tipo}</p>
             <div className="space-y-space-sm">
-              <div className="space-y-1">
-                <label className="font-label-lg text-label-lg text-on-surface font-medium">Nueva fecha</label>
+              <label className="block space-y-1">
+                <span className="block font-label-lg text-label-lg text-on-surface font-medium">Nueva fecha</span>
                 <input
                   type="date"
                   value={nuevaFecha}
                   onChange={(e) => setNuevaFecha(e.target.value)}
                   className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
                 />
-              </div>
-              <div className="space-y-1">
-                <label className="font-label-lg text-label-lg text-on-surface font-medium">Nueva hora de inicio</label>
+              </label>
+              <label className="block space-y-1">
+                <span className="block font-label-lg text-label-lg text-on-surface font-medium">Nueva hora de inicio</span>
                 <input
                   type="time"
                   value={nuevaHora}
                   onChange={(e) => setNuevaHora(e.target.value)}
                   className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary"
                 />
-              </div>
+              </label>
             </div>
             <div className="flex gap-space-sm mt-space-md">
               <button
