@@ -150,7 +150,7 @@ export default function ConfiguracionPage() {
         <div className="flex flex-col gap-1.5">
           {semanas.map(({ lunes, label }) => (
             <div key={lunes} className="flex flex-wrap items-center justify-between gap-2 border border-surface-container rounded-lg px-space-sm py-1.5">
-              <span className="text-body-md text-on-surface capitalize">{label}</span>
+              <span className="text-body-md text-on-surface">{label}</span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => copiarSemanaAnterior(lunes)}

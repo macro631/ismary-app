@@ -308,7 +308,7 @@ function AntecedentesAdjuntos({ patient, onAdd, onRemove }) {
           </div>
         ))}
       </div>
-      <div className="flex flex-col sm:flex-row gap-space-sm">
+      <div className="flex flex-col gap-space-sm">
         <select
           value={tipo}
           onChange={(e) => setTipo(e.target.value)}
@@ -322,9 +322,10 @@ function AntecedentesAdjuntos({ patient, onAdd, onRemove }) {
           onClick={() => fileInputRef.current?.click()}
           className="flex items-center justify-center gap-1.5 px-space-md py-2 rounded-lg border-2 border-dashed border-surface-container text-on-surface-variant hover:border-primary hover:text-primary font-label-lg text-label-lg"
         >
-          <span className="material-symbols-outlined text-[18px]">attach_file</span>
-          Adjuntar archivo (solo maqueta, no se sube realmente)
+          <span aria-hidden="true" className="material-symbols-outlined text-[18px]">attach_file</span>
+          Adjuntar archivo
         </button>
+        <p className="text-body-sm text-on-surface-variant">Maqueta: el archivo no se sube realmente.</p>
         <input ref={fileInputRef} type="file" onChange={handleFile} className="hidden" />
       </div>
     </div>

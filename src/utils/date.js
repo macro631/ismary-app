@@ -56,7 +56,7 @@ export function formatRangeLabel(weekDates) {
   const endDay = end.getDate();
   const mes = MES_LABELS[end.getMonth()];
   const anio = end.getFullYear();
-  return `${startDay} – ${endDay} de ${mes.charAt(0).toUpperCase() + mes.slice(1)}, ${anio}`;
+  return `${startDay} – ${endDay} de ${mes}, ${anio}`;
 }
 
 export function formatLongDate(iso) {

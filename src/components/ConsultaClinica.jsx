@@ -265,38 +265,40 @@ function ConsultaForm({ paciente, borrador, onCerrar }) {
 
       <CampoTexto label="Observaciones" value={campos.observaciones} onChange={(v) => campo("observaciones", v)} />
 
-      <div className="flex items-center gap-space-sm pt-space-sm border-t border-surface-container flex-wrap">
+      {/* Una sola acción principal (Finalizar). En móvil los botones van a
+          ancho completo, con Finalizar arriba y la acción destructiva al final. */}
+      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-space-sm pt-space-sm border-t border-surface-container">
         <button
           type="button"
           onClick={() => setShowDocumentos(true)}
-          className="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-strong transition-all"
+          className="order-3 sm:order-none flex items-center justify-center gap-1.5 px-space-md py-2 rounded-lg border border-primary bg-surface-container-lowest text-primary font-label-lg text-label-lg hover:bg-brand-soft transition-colors"
         >
-          <span className="material-symbols-outlined text-[18px]">prescriptions</span>
-          Emitir Receta / Solicitud
+          <span aria-hidden="true" className="material-symbols-outlined text-[18px]">prescriptions</span>
+          Emitir receta o solicitud
         </button>
         <button
           type="button"
           onClick={() => setConfirmandoCancelar(true)}
-          className="flex items-center gap-1.5 px-space-md py-2 rounded-lg text-status-cancelada font-label-lg text-label-lg hover:bg-status-cancelada-bg transition-colors"
+          className="order-4 sm:order-none flex items-center justify-center gap-1.5 px-space-md py-2 rounded-lg text-status-cancelada font-label-lg text-label-lg hover:bg-status-cancelada-bg transition-colors"
         >
-          <span className="material-symbols-outlined text-[18px]">delete</span>
-          Cancelar Consulta
+          <span aria-hidden="true" className="material-symbols-outlined text-[18px]">delete</span>
+          Cancelar consulta
         </button>
-        <div className="flex-1" />
+        <div className="hidden sm:block flex-1" />
         <button
           type="button"
           onClick={guardarYCerrar}
-          className="px-space-md py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg hover:bg-surface-container-high"
+          className="order-2 sm:order-none px-space-md py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg hover:bg-surface-container-high"
         >
-          Guardar y Cerrar
+          Guardar y cerrar
         </button>
         <button
           type="button"
           onClick={finalizar}
-          className="px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-strong flex items-center gap-1.5"
+          className="order-1 sm:order-none px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-strong flex items-center justify-center gap-1.5"
         >
-          <span className="material-symbols-outlined text-[18px]">check_circle</span>
-          Finalizar Consulta
+          <span aria-hidden="true" className="material-symbols-outlined text-[18px]">check_circle</span>
+          Finalizar consulta
         </button>
       </div>
 

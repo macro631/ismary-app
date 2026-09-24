@@ -137,7 +137,7 @@ export default function CalendarioPage() {
                 <span className="font-headline-sm text-headline-sm text-primary">
                   {view === "dia" ? formatLongDate(anchorDate) : formatRangeLabel(weekDates)}
                 </span>
-                <span className="font-code-clinical text-code-clinical text-secondary">Semana {weekNumber(anchorDate)}</span>
+                <span className="hidden sm:inline font-code-clinical text-code-clinical text-secondary">Semana {weekNumber(anchorDate)}</span>
               </div>
             </div>
           )}
@@ -170,8 +170,8 @@ export default function CalendarioPage() {
             onClick={() => navigate("/configuracion")}
             className="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-surface-container-lowest text-primary font-label-lg text-label-lg shadow-sm hover:bg-secondary-container transition-all"
           >
-            <span className="material-symbols-outlined text-[18px]">tune</span>
-            <span className="hidden sm:inline">Disponibilidad</span>
+            <span aria-hidden="true" className="material-symbols-outlined text-[18px]">tune</span>
+            Disponibilidad
           </button>
         </div>
       </div>
@@ -527,14 +527,16 @@ function DiaColumn({ citas, patientById, onSelectCita, expanded = false }) {
                 : "border-surface-container bg-surface hover:border-primary-fixed"
             }`}
           >
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-code-clinical font-code-clinical text-secondary">
+            {/* flex-wrap: en la grilla semanal la columna es angosta y la
+                etiqueta de estado baja a su propia línea en vez de cortarse. */}
+            <div className="flex flex-wrap items-center justify-between gap-1">
+              <span className="text-code-clinical font-code-clinical text-secondary whitespace-nowrap">
                 {cita.horaInicio}–{cita.horaFin}
               </span>
-              <StatusBadge estado={cita.estado} />
+              <StatusBadge estado={cita.estado} compact={!expanded} />
             </div>
-            <p className="font-title-sm text-title-sm text-on-surface mt-1 truncate">{p?.nombre}</p>
-            <p className="text-body-sm text-on-surface-variant truncate">{cita.tipo}</p>
+            <p className={`font-title-sm text-title-sm text-on-surface mt-1 ${expanded ? "truncate" : "line-clamp-2"}`}>{p?.nombre}</p>
+            <p className={`text-body-sm text-on-surface-variant ${expanded ? "truncate" : "line-clamp-2"}`}>{cita.tipo}</p>
             {cita.ubicacion && (
               <p className="text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
                 <span className="material-symbols-outlined text-[14px]">
