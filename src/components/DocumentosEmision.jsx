@@ -280,7 +280,7 @@ function SolicitudExamenes({ paciente, documents, consultaId, upsertDocument, em
               <p className="font-title-sm text-title-sm text-on-surface mb-space-xs">Seleccionados en una versión anterior</p>
               {opcionesAnteriores.map((item) => (
                 <label key={item} className="flex items-center gap-2 text-body-sm p-1.5">
-                  <input type="checkbox" disabled={bloqueado} checked onChange={() => toggleItem(item)} className="accent-[#7a2e50] w-4 h-4" />
+                  <input type="checkbox" disabled={bloqueado} checked onChange={() => toggleItem(item)} className="accent-primary w-4 h-4" />
                   {item}
                 </label>
               ))}
@@ -293,7 +293,7 @@ function SolicitudExamenes({ paciente, documents, consultaId, upsertDocument, em
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                 {grupo.exams.map((item) => (
                   <label key={item} className={`flex items-center gap-2 text-body-sm p-1.5 rounded-lg hover:bg-surface-container-low ${bloqueado ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}>
-                    <input type="checkbox" disabled={bloqueado} checked={items.includes(item)} onChange={() => toggleItem(item)} className="accent-[#7a2e50] w-4 h-4" />
+                    <input type="checkbox" disabled={bloqueado} checked={items.includes(item)} onChange={() => toggleItem(item)} className="accent-primary w-4 h-4" />
                     {item}
                   </label>
                 ))}
@@ -337,7 +337,7 @@ function SolicitudExamenes({ paciente, documents, consultaId, upsertDocument, em
               <button onClick={() => handleGuardar("borrador")} className="px-space-md py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg hover:bg-surface-container-high">
                 Guardar Borrador
               </button>
-              <button onClick={() => handleGuardar("emitido")} className="px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary flex items-center gap-1.5">
+              <button onClick={() => handleGuardar("emitido")} className="px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-strong flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[18px]">draw</span>
                 Firmar y Emitir Solicitud
               </button>
@@ -491,7 +491,7 @@ function RecetaDigital({ paciente, documents, consultaId, upsertDocument, emitir
               <button onClick={() => handleGuardar("borrador")} className="px-space-md py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg hover:bg-surface-container-high">
                 Guardar Borrador
               </button>
-              <button onClick={() => handleGuardar("emitido")} className="px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary flex items-center gap-1.5">
+              <button onClick={() => handleGuardar("emitido")} className="px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-strong flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[18px]">draw</span>
                 Firmar y Emitir Receta
               </button>

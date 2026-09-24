@@ -204,7 +204,7 @@ export default function CalendarioPage() {
                           seleccionado ? "bg-primary text-on-primary shadow-sm" : "text-on-surface hover:bg-surface-container-low"
                         }`}
                       >
-                        <span className={`text-[10px] uppercase font-label-md ${seleccionado ? "text-on-primary/80" : "text-secondary"}`}>
+                        <span className={`text-[12px] uppercase font-label-md ${seleccionado ? "text-on-primary/80" : "text-secondary"}`}>
                           {dayLabel(iso)}
                         </span>
                         <span className="font-headline-sm text-headline-sm">{dayNumber(iso)}</span>
@@ -237,7 +237,7 @@ export default function CalendarioPage() {
                           <span className="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center font-headline-sm text-headline-sm shadow-sm">
                             {dayNumber(iso)}
                           </span>
-                          <span className="text-[10px] font-code-clinical text-primary uppercase font-bold tracking-wider mt-0.5">Hoy</span>
+                          <span className="text-[12px] font-code-clinical text-primary uppercase font-bold tracking-wider mt-0.5">Hoy</span>
                         </>
                       ) : (
                         <span className="font-headline-sm text-headline-sm text-primary">{dayNumber(iso)}</span>
@@ -264,14 +264,14 @@ export default function CalendarioPage() {
             <div className="bg-primary rounded-xl p-space-md text-on-primary shadow-md">
               <div className="flex items-center justify-between">
                 <span className="font-label-md text-label-md uppercase tracking-wide opacity-80">Hoy en Agenda</span>
-                <span className="text-[11px] bg-white/15 px-2 py-0.5 rounded-full">{todaysAppointments.length} Atenciones</span>
+                <span className="text-[12px] bg-white/15 px-2 py-0.5 rounded-full">{todaysAppointments.length} Atenciones</span>
               </div>
               <p className="font-headline-md text-headline-md mt-1">{formatLongDate(REFERENCE_TODAY)}</p>
               <div className="grid grid-cols-3 gap-2 mt-space-md">
                 {Object.entries(todaysCountByModalidad).map(([k, v]) => (
                   <div key={k} className="bg-white/10 rounded-lg py-2 text-center">
                     <div className="font-headline-lg text-headline-lg">{v}</div>
-                    <div className="text-[10px] uppercase opacity-80">{k === "Box Clínico" ? "Box" : k === "Domicilio" ? "Domicilio" : "Online"}</div>
+                    <div className="text-[12px] uppercase opacity-80">{k === "Box Clínico" ? "Box" : k === "Domicilio" ? "Domicilio" : "Online"}</div>
                   </div>
                 ))}
               </div>
@@ -283,7 +283,7 @@ export default function CalendarioPage() {
                   <span className="material-symbols-outlined text-[18px] text-primary">notifications_active</span>
                   Solicitudes Web Pendientes
                 </div>
-                <span className="w-5 h-5 rounded-full bg-primary text-on-primary text-[11px] flex items-center justify-center">
+                <span className="w-5 h-5 rounded-full bg-primary text-on-primary text-[12px] flex items-center justify-center">
                   {webRequests.length}
                 </span>
               </div>
@@ -311,7 +311,7 @@ export default function CalendarioPage() {
                         </span>
                         <button
                           onClick={() => confirmWebRequest(req.id)}
-                          className="bg-primary-container text-on-primary text-label-lg font-label-lg px-3 py-1 rounded-lg hover:bg-primary transition-colors"
+                          className="bg-primary-container text-on-primary text-label-lg font-label-lg px-3 py-1 rounded-lg hover:bg-primary-strong transition-colors"
                         >
                           Confirmar
                         </button>
@@ -338,7 +338,7 @@ export default function CalendarioPage() {
                       className="flex items-center justify-between gap-2 text-left hover:bg-surface-container-low rounded-lg p-1.5 -m-1.5 transition-colors"
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-9 h-9 rounded-full bg-[#f7e6eb] text-primary flex items-center justify-center font-semibold text-xs shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-brand-soft text-primary flex items-center justify-center font-semibold text-xs shrink-0">
                           {initials}
                         </div>
                         <div className="min-w-0">

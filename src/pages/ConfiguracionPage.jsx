@@ -82,7 +82,7 @@ export default function ConfiguracionPage() {
           <p className="text-body-md text-on-surface-variant">Datos profesionales, disponibilidad y seguridad.</p>
         </div>
         {savedAt && (
-          <span className="text-body-sm bg-[#f5f3f2] text-[#3d3d3d]/80 px-3 py-1.5 rounded-full border border-[#e2d3db]/50 flex items-center gap-1.5">
+          <span className="text-body-sm bg-surface-container-low text-text-primary/80 px-3 py-1.5 rounded-full border border-border-subtle/50 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             Guardado {savedAt}
           </span>
@@ -205,7 +205,7 @@ export default function ConfiguracionPage() {
               type="checkbox"
               checked={config.respaldoAutomatico}
               onChange={(e) => setConfig((c) => ({ ...c, respaldoAutomatico: e.target.checked }))}
-              className="w-4 h-4 accent-[#7a2e50]"
+              className="w-4 h-4 accent-primary"
             />
             <span className="text-body-md text-on-surface">Respaldo automático diario activado</span>
           </label>

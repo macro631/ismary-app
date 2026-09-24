@@ -50,7 +50,7 @@ export default function FichaClinicaPage() {
       {/* Banner de paciente persistente */}
       <div className="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
         <div className="flex items-center gap-space-sm min-w-0">
-          <div className="w-14 h-14 rounded-full bg-[#f7e6eb] text-primary flex items-center justify-center font-semibold text-lg shrink-0">
+          <div className="w-14 h-14 rounded-full bg-brand-soft text-primary flex items-center justify-center font-semibold text-lg shrink-0">
             {patient.nombre.split(" ").slice(0, 2).map((n) => n[0]).join("")}
           </div>
           <div className="min-w-0">
@@ -95,15 +95,15 @@ export default function FichaClinicaPage() {
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <div className="bg-white/10 rounded-lg py-2 text-center">
-                  <div className="text-[11px] uppercase opacity-80">FUM</div>
+                  <div className="text-[12px] uppercase opacity-80">FUM</div>
                   <div className="font-title-md text-title-md">{patient.fur}</div>
                 </div>
                 <div className="bg-white/10 rounded-lg py-2 text-center">
-                  <div className="text-[11px] uppercase opacity-80">Edad Gestacional</div>
+                  <div className="text-[12px] uppercase opacity-80">Edad Gestacional</div>
                   <div className="font-title-md text-title-md">{eg?.texto || "—"}</div>
                 </div>
                 <div className="bg-white/10 rounded-lg py-2 text-center">
-                  <div className="text-[11px] uppercase opacity-80">FPP</div>
+                  <div className="text-[12px] uppercase opacity-80">FPP</div>
                   <div className="font-title-md text-title-md">{fpp || "—"}</div>
                 </div>
               </div>
@@ -176,7 +176,7 @@ function InformacionPrioritaria({ ultimaConsulta, proximaCita, solicitudesPendie
   const tieneAlerta = items.some((i) => i.alerta);
 
   return (
-    <div className={`rounded-xl border p-space-md ${tieneAlerta ? "border-status-cancelada bg-status-cancelada-bg" : "border-[#E8C1D0] bg-[#FBEAF0]"}`}>
+    <div className={`rounded-xl border p-space-md ${tieneAlerta ? "border-status-cancelada bg-status-cancelada-bg" : "border-brand-medium bg-[#FBEAF0]"}`}>
       <div className="flex items-center gap-1.5 font-label-md text-label-md uppercase tracking-wide text-primary mb-space-sm">
         <span className="material-symbols-outlined text-[16px]">priority_high</span>
         Información Prioritaria
@@ -213,7 +213,7 @@ function InfoPermanente({ patient, onSave }) {
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h2 className="font-headline-sm text-headline-sm text-primary">Información Clínica Permanente</h2>
         {editando ? (
-          <span className="text-body-sm bg-[#f5f3f2] text-[#3d3d3d]/80 px-3 py-1.5 rounded-full border border-[#e2d3db]/50 flex items-center gap-1.5">
+          <span className="text-body-sm bg-surface-container-low text-text-primary/80 px-3 py-1.5 rounded-full border border-border-subtle/50 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             {savedAt ? `Guardado automáticamente ${savedAt}` : "Autoguardado activo"}
           </span>
@@ -247,7 +247,7 @@ function InfoPermanente({ patient, onSave }) {
           <button
             type="button"
             onClick={() => setEditando(false)}
-            className="self-end px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-[#682442] transition-colors"
+            className="self-end px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-strong transition-colors"
           >
             Listo
           </button>

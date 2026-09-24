@@ -102,7 +102,7 @@ function ConsultaCard({ consulta, documentosVinculados }) {
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
               {vitalesConDatos.map(([k, v]) => (
                 <div key={k} className="bg-surface-container-low rounded-lg py-1.5 text-center">
-                  <div className="text-[10px] uppercase text-on-surface-variant">{k.toUpperCase()}</div>
+                  <div className="text-[12px] uppercase text-on-surface-variant">{k.toUpperCase()}</div>
                   <div className="text-body-sm font-semibold text-on-surface">{v}</div>
                 </div>
               ))}
@@ -186,7 +186,7 @@ function ConsultaForm({ paciente, borrador, onCerrar }) {
     <div className="border border-primary-fixed rounded-xl p-space-md bg-surface-container-lowest flex flex-col gap-space-md">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h3 className="font-headline-sm text-headline-sm text-primary">Consulta en curso</h3>
-        <span className="text-body-sm bg-[#f5f3f2] text-[#3d3d3d]/80 px-3 py-1.5 rounded-full border border-[#e2d3db]/50 flex items-center gap-1.5">
+        <span className="text-body-sm bg-surface-container-low text-text-primary/80 px-3 py-1.5 rounded-full border border-border-subtle/50 flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           {savedAt ? `Guardado automáticamente ${savedAt}` : "Autoguardado activo"}
         </span>
@@ -269,7 +269,7 @@ function ConsultaForm({ paciente, borrador, onCerrar }) {
         <button
           type="button"
           onClick={() => setShowDocumentos(true)}
-          className="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary transition-all"
+          className="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-strong transition-all"
         >
           <span className="material-symbols-outlined text-[18px]">prescriptions</span>
           Emitir Receta / Solicitud
@@ -293,7 +293,7 @@ function ConsultaForm({ paciente, borrador, onCerrar }) {
         <button
           type="button"
           onClick={finalizar}
-          className="px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-[#682442] flex items-center gap-1.5"
+          className="px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-strong flex items-center gap-1.5"
         >
           <span className="material-symbols-outlined text-[18px]">check_circle</span>
           Finalizar Consulta
@@ -413,7 +413,7 @@ export default function ConsultaClinica({ paciente, documents }) {
         {!formAbierto && (
           <button
             onClick={iniciarConsulta}
-            className="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary transition-all"
+            className="flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-strong transition-all"
           >
             <span className="material-symbols-outlined text-[18px]">{borrador ? "edit_note" : "add"}</span>
             {borrador ? "Continuar Consulta en Borrador" : "Nueva Consulta"}

@@ -97,7 +97,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={status === "checking"}
-              className="w-full h-12 rounded-lg bg-primary-container hover:bg-[#682442] active:scale-[0.99] text-on-primary font-title-sm text-title-sm font-semibold shadow-md flex items-center justify-center gap-2 transition-all disabled:opacity-75"
+              className="w-full h-12 rounded-lg bg-primary-container hover:bg-primary-strong active:scale-[0.99] text-on-primary font-title-sm text-title-sm font-semibold shadow-md flex items-center justify-center gap-2 transition-all disabled:opacity-75"
             >
               <span className={`material-symbols-outlined text-[20px] ${status === "checking" ? "animate-spin" : ""}`}>
                 {status === "checking" ? "progress_activity" : "login"}

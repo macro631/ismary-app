@@ -18,7 +18,7 @@ export default function AppShell({ children }) {
       <header className="fixed top-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-md shadow-[0_4px_20px_-4px_rgba(122,46,80,0.06)]">
         <div className="h-[var(--app-header-h)] w-full px-[var(--app-header-px)] md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-2 md:gap-gutter">
           <div className="flex items-center gap-1 shrink-0 min-w-0 h-full py-2">
-            <div className="w-[var(--app-icon-shell)] h-[var(--app-icon-shell)] rounded-full bg-[#f7e6eb] border border-[#e2d3db] flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+            <div className="w-[var(--app-icon-shell)] h-[var(--app-icon-shell)] rounded-full bg-brand-soft border border-border-subtle flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
               <img src="logo/icono-color.svg" alt="Logo Ismary Ugalde" className="w-[var(--app-icon-img)] h-[var(--app-icon-img)] object-contain" />
             </div>
             <img
@@ -38,7 +38,7 @@ export default function AppShell({ children }) {
                   `text-sm tracking-wide font-medium transition-colors pb-1 border-b-2 ${
                     isActive
                       ? "text-primary font-semibold border-primary"
-                      : "text-[#3d3d3d]/70 hover:text-primary border-transparent"
+                      : "text-text-primary/70 hover:text-primary border-transparent"
                   }`
                 }
               >
@@ -48,7 +48,7 @@ export default function AppShell({ children }) {
           </nav>
 
           <div className="flex items-center gap-1 sm:gap-3 shrink-0">
-            <div className="hidden xl:flex items-center gap-1.5 text-xs bg-[#f5f3f2] text-[#3d3d3d]/80 px-3 py-1.5 rounded-full border border-[#e2d3db]/50">
+            <div className="hidden xl:flex items-center gap-1.5 text-sm bg-surface-container-low text-text-primary/80 px-3 py-1.5 rounded-full border border-border-subtle/50">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Autoguardado Activo</span>
             </div>
@@ -63,7 +63,7 @@ export default function AppShell({ children }) {
             <button
               type="button"
               onClick={() => navigate("/calendario")}
-              className="hidden xl:flex items-center gap-2 bg-primary hover:bg-[#682442] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition-all"
+              className="hidden xl:flex items-center gap-2 bg-primary hover:bg-primary-strong text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition-all"
             >
               <span className="material-symbols-outlined text-[16px]">add</span>
               Nueva Cita / Atención
@@ -75,7 +75,7 @@ export default function AppShell({ children }) {
                 logout();
                 navigate("/login");
               }}
-              className="hidden xl:flex w-8 h-8 rounded-full bg-[#f7e6eb] border border-[#e2d3db] text-primary items-center justify-center font-semibold text-xs shadow-sm hover:bg-primary hover:text-white transition-colors"
+              className="hidden xl:flex w-8 h-8 rounded-full bg-brand-soft border border-border-subtle text-primary items-center justify-center font-semibold text-xs shadow-sm hover:bg-primary hover:text-white transition-colors"
             >
               IU
             </button>

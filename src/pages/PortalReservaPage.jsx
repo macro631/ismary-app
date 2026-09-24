@@ -392,7 +392,7 @@ export default function PortalReservaPage() {
                 type="checkbox"
                 checked={aceptaConfirmacion}
                 onChange={(e) => setAceptaConfirmacion(e.target.checked)}
-                className="w-4 h-4 mt-0.5 rounded accent-[#7a2e50]"
+                className="w-4 h-4 mt-0.5 rounded accent-primary"
               />
               <span className="text-body-sm text-on-surface leading-tight">
                 Acepto recibir la confirmación administrativa de esta reserva por correo, junto con la política de privacidad.
@@ -552,7 +552,7 @@ function StepIndicator({ pasoActual }) {
               {completado ? <span className="material-symbols-outlined text-[16px]">check</span> : i + 1}
             </span>
             <span
-              className={`text-[10px] uppercase tracking-wide text-center ${
+              className={`text-[12px] uppercase tracking-wide text-center ${
                 activo ? "text-primary font-semibold" : "text-on-surface-variant"
               }`}
             >
@@ -577,7 +577,7 @@ function MiniCalendario({ ventana, diasHabilesModalidad, fecha, onSelect }) {
       <p className="font-title-sm text-title-sm text-primary text-center mb-space-sm capitalize">{label}</p>
       <div className="grid grid-cols-7 gap-1 text-center mb-1">
         {["L", "M", "M", "J", "V", "S", "D"].map((d, i) => (
-          <span key={i} className="text-[11px] font-label-md text-secondary">{d}</span>
+          <span key={i} className="text-[12px] font-label-md text-secondary">{d}</span>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1">
@@ -619,7 +619,7 @@ function MiniCalendario({ ventana, diasHabilesModalidad, fecha, onSelect }) {
 function InfoTile({ label, value, className = "" }) {
   return (
     <div className={`bg-surface-container-low rounded-lg p-space-sm ${className}`}>
-      <p className="text-[11px] uppercase tracking-wide text-secondary font-label-md">{label}</p>
+      <p className="text-[12px] uppercase tracking-wide text-secondary font-label-md">{label}</p>
       <p className="text-body-md text-on-surface">{value}</p>
     </div>
   );

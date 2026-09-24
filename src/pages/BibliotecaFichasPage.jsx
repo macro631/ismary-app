@@ -73,7 +73,7 @@ export default function BibliotecaFichasPage() {
           return (
             <div key={p.id} className="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
               <div className="flex items-center gap-space-sm">
-                <div className="w-11 h-11 rounded-full bg-[#f7e6eb] text-primary flex items-center justify-center font-semibold shrink-0">
+                <div className="w-11 h-11 rounded-full bg-brand-soft text-primary flex items-center justify-center font-semibold shrink-0">
                   {initials}
                 </div>
                 <div className="min-w-0">
