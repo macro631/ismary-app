@@ -27,12 +27,10 @@
 @media (min-width: 1024px) { .talonario-sheet { zoom: 0.8; } }
 .talonario-master { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 .talonario-data { position: absolute; display: block; overflow: hidden; white-space: nowrap; color: var(--talonario-navy); font: 8.4pt/5mm Arial, Helvetica, sans-serif; text-overflow: clip; }
-.talonario-data--small { font-size: 6.7pt; }
 .talonario-data--multiline { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 7mm; }
-.talonario-exam-list { position: absolute; display: grid; align-content: start; column-gap: 4mm; row-gap: .5mm; overflow: hidden; color: var(--talonario-navy); font: 7.5pt/4mm Arial, Helvetica, sans-serif; }
-.talonario-exam-item { display: flex; align-items: flex-start; gap: 1.2mm; min-width: 0; min-height: 4mm; overflow-wrap: anywhere; }
-.talonario-exam-item > span:last-child { min-width: 0; }
-.talonario-exam-check { display: grid; flex: none; width: 3.2mm; height: 3.2mm; place-items: center; margin-top: .35mm; border: .2mm solid var(--talonario-navy); border-radius: .35mm; color: var(--talonario-mauve); font: bold 7pt/1 Arial, Helvetica, sans-serif; }
+.talonario-data--linea { font-size: 7pt; line-height: 3.2mm; }
+.talonario-data--otros { white-space: normal; overflow-wrap: anywhere; font-size: 7pt; }
+.talonario-check { position: absolute; display: grid; place-items: center; color: var(--talonario-mauve); font: bold 9pt/1 Arial, Helvetica, sans-serif; }
 @page { size: A5 portrait; margin: 0; }
 @media print {
   html, body, #root { width: 148mm !important; min-width: 0 !important; height: 210mm !important; margin: 0 !important; overflow: hidden !important; background: #fff !important; }

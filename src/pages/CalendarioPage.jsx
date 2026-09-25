@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useClinica } from "../data/store";
 import StatusBadge from "../components/StatusBadge";
 import {
@@ -13,6 +13,7 @@ import {
   getMonthGrid,
 } from "../utils/date";
 import { HOY } from "../utils/today";
+import { validDate } from "../utils/scheduling";
 
 const REFERENCE_TODAY = HOY;
 
@@ -36,14 +37,18 @@ function hhmmFromMinutes(total) {
 export default function CalendarioPage() {
   const { appointments, webRequests, patients, confirmWebRequest, updateAppointment } = useClinica();
   const navigate = useNavigate();
-  const [view, setView] = useState("semana"); // dia | semana | mes
-  const [anchorDate, setAnchorDate] = useState(REFERENCE_TODAY);
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const initialDate = validDate(searchParams.get("fecha")) ? searchParams.get("fecha") : REFERENCE_TODAY;
+  const [view, setView] = useState(() => searchParams.get("vista") === "dia" ? "dia" : "semana"); // dia | semana | mes
+  const [anchorDate, setAnchorDate] = useState(initialDate);
+  const [requestError, setRequestError] = useState("");
   const [modalidadFiltro, setModalidadFiltro] = useState(null);
   const [citaSeleccionada, setCitaSeleccionada] = useState(null);
   // En móvil, el modo "semana" no muestra las 6 columnas lado a lado (no
   // caben legibles) sino un selector horizontal de días + las citas del día
   // elegido, como en el modo "Día".
-  const [diaMovil, setDiaMovil] = useState(REFERENCE_TODAY);
+  const [diaMovil, setDiaMovil] = useState(initialDate);
 
   const patientById = useMemo(() => Object.fromEntries(patients.map((p) => [p.id, p])), [patients]);
 
@@ -95,8 +100,18 @@ export default function CalendarioPage() {
     navigate(`/fichas/${pacienteId}`);
   }
 
+  async function confirmRequest(requestId) {
+    setRequestError("");
+    try {
+      const result = await confirmWebRequest(requestId);
+      if (result.error) setRequestError(result.error);
+    } catch { setRequestError("No pudimos confirmar la solicitud. Intenta nuevamente."); }
+  }
+
   return (
     <div className="flex flex-col w-full">
+      {location.state?.appointmentCreated && <div role="status" className="mx-margin md:mx-margin-tablet lg:mx-margin-desktop mt-space-md p-3 rounded-lg bg-status-confirmada-bg text-status-confirmada text-body-sm">La cita quedó confirmada y aparece en la agenda.</div>}
+      {requestError && <div role="alert" className="mx-margin md:mx-margin-tablet lg:mx-margin-desktop mt-space-md p-3 rounded-lg bg-status-cancelada-bg text-status-cancelada text-body-sm">{requestError}</div>}
       <div className="w-full px-margin md:px-margin-tablet lg:px-margin-desktop py-space-md bg-surface-container-low flex flex-col xl:flex-row xl:items-center xl:justify-between gap-space-md">
         <div className="flex flex-wrap items-center gap-space-md">
           <div className="inline-flex p-1 bg-surface-container rounded-lg shadow-sm">
@@ -144,6 +159,7 @@ export default function CalendarioPage() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between xl:justify-end gap-space-md">
+          <button onClick={() => navigate("/citas/nueva")} className="xl:hidden flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-primary text-on-primary text-label-lg font-label-lg"><span aria-hidden="true" className="material-symbols-outlined text-[18px]">add</span>Nueva cita</button>
           <div className="flex flex-wrap items-center gap-1.5">
             <button
               onClick={() => setModalidadFiltro(null)}
@@ -310,7 +326,7 @@ export default function CalendarioPage() {
                           {req.modalidad}
                         </span>
                         <button
-                          onClick={() => confirmWebRequest(req.id)}
+                          onClick={() => confirmRequest(req.id)}
                           className="bg-primary-container text-on-primary text-label-lg font-label-lg px-3 py-1 rounded-lg hover:bg-primary-strong transition-colors"
                         >
                           Confirmar
@@ -376,23 +392,35 @@ function CitaDetalleModal({ cita, paciente, onClose, onVerFicha, onUpdateAppoint
   const [modo, setModo] = useState("detalle"); // detalle | reprogramar | cancelar
   const [nuevaFecha, setNuevaFecha] = useState(cita.fecha);
   const [nuevaHora, setNuevaHora] = useState(cita.horaInicio);
+  const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const duracionMin = minutesOfDay(cita.horaFin) - minutesOfDay(cita.horaInicio);
 
-  function confirmarReprogramacion() {
+  async function confirmarReprogramacion() {
+    if (saving) return;
+    setSaving(true);
+    setError("");
     const inicio = minutesOfDay(nuevaHora);
-    onUpdateAppointment(cita.id, {
-      fecha: nuevaFecha,
-      horaInicio: nuevaHora,
-      horaFin: hhmmFromMinutes(inicio + Math.max(duracionMin, 0)),
-      estado: "reprogramada",
-    });
-    onClose();
+    try {
+      const result = await onUpdateAppointment(cita.id, {
+        fecha: nuevaFecha, horaInicio: nuevaHora,
+        horaFin: hhmmFromMinutes(inicio + Math.max(duracionMin, 0)), estado: "reprogramada",
+      });
+      if (result.error) setError(result.error); else onClose();
+    } catch { setError("No pudimos reprogramar la cita. Intenta nuevamente."); }
+    finally { setSaving(false); }
   }
 
-  function confirmarCancelacion() {
-    onUpdateAppointment(cita.id, { estado: "cancelada" });
-    onClose();
+  async function confirmarCancelacion() {
+    if (saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      const result = await onUpdateAppointment(cita.id, { estado: "cancelada" });
+      if (result.error) setError(result.error); else onClose();
+    } catch { setError("No pudimos cancelar la cita. Intenta nuevamente."); }
+    finally { setSaving(false); }
   }
 
   return (
@@ -401,6 +429,7 @@ function CitaDetalleModal({ cita, paciente, onClose, onVerFicha, onUpdateAppoint
         className="bg-surface-container-lowest rounded-xl shadow-xl max-w-sm w-full p-space-lg"
         onClick={(e) => e.stopPropagation()}
       >
+        {error && <p role="alert" className="text-body-sm text-status-cancelada bg-status-cancelada-bg rounded-lg p-2 mb-3">{error}</p>}
         {modo === "detalle" && (
           <>
             <div className="flex items-center justify-between gap-2 mb-space-sm">
@@ -471,6 +500,7 @@ function CitaDetalleModal({ cita, paciente, onClose, onVerFicha, onUpdateAppoint
               </button>
               <button
                 onClick={confirmarReprogramacion}
+                disabled={saving}
                 className="flex-1 h-11 rounded-lg bg-primary-container text-on-primary font-title-sm text-title-sm font-semibold"
               >
                 Confirmar
@@ -494,6 +524,7 @@ function CitaDetalleModal({ cita, paciente, onClose, onVerFicha, onUpdateAppoint
               </button>
               <button
                 onClick={confirmarCancelacion}
+                disabled={saving}
                 className="flex-1 h-11 rounded-lg bg-status-cancelada text-white font-title-sm text-title-sm font-semibold"
               >
                 Sí, cancelar

@@ -55,7 +55,7 @@
   },
   "contact": {
     "email": "mt.ismary.ur@gmail.com",
-    "instagram": "ismary.matrona",
+    "instagram": "ismary.mt",
     "topMm": 196
   },
   "documents": {
@@ -99,138 +99,19 @@
         42
       ],
       "signatureLineMm": [
-        14,
-        181,
-        60
+        48,
+        188,
+        100
       ],
       "signatureLabelMm": [
-        37,
-        182.6
+        74,
+        189.2
       ],
-      "contactShiftMm": -10,
+      "contactShiftMm": -4,
+      "contactTopMm": 197.5,
       "pdf": "ismary-examenes-a5.pdf",
       "backgroundPng": "examenes-a5.png"
     }
-  },
-  "layout": {
-    "recipe": {
-      "patient": [
-        29,
-        64.7,
-        107,
-        5
-      ],
-      "rut": [
-        23,
-        72.7,
-        55,
-        5
-      ],
-      "date": [
-        97,
-        72.7,
-        39,
-        5
-      ],
-      "age": [
-        25,
-        80.7,
-        15,
-        5
-      ],
-      "patientAddress": [
-        66,
-        80.7,
-        70,
-        5
-      ],
-      "diagnosis": [
-        38,
-        88.7,
-        98,
-        5
-      ],
-      "prescription": [
-        28,
-        100.7,
-        108,
-        35
-      ],
-      "indications": [
-        13,
-        141.7,
-        123,
-        21
-      ],
-      "folio": [
-        104,
-        58.8,
-        32,
-        5
-      ]
-    },
-    "exams": {
-      "patient": [
-        29,
-        64.7,
-        107,
-        5
-      ],
-      "rut": [
-        23,
-        72.7,
-        54,
-        5
-      ],
-      "age": [
-        96,
-        72.7,
-        40,
-        5
-      ],
-      "birthDate": [
-        28,
-        80.7,
-        49,
-        5
-      ],
-      "date": [
-        97,
-        80.7,
-        39,
-        5
-      ],
-      "patientAddress": [
-        34,
-        88.7,
-        102,
-        5
-      ],
-      "examList": [
-        14,
-        110,
-        120,
-        45
-      ],
-      "observations": [
-        13,
-        164.5,
-        123,
-        5
-      ],
-      "folio": [
-        104,
-        58.8,
-        32,
-        5
-      ]
-    }
-  },
-  "examList": {
-    "selectedOnly": true,
-    "showCheckbox": true,
-    "columns": 2,
-    "allowCustom": true
   },
   "examCatalog": [
     {
@@ -342,6 +223,538 @@
         "Proteína C reactiva cualitativa",
         "Proteína C reactiva (PCR)"
       ]
+    },
+    {
+      "category": "Imágenes",
+      "exams": [
+        "Mamografía",
+        "Ecografía"
+      ]
     }
-  ]
+  ],
+  "physicalChecklist": {
+    "_comment": "Casillas preimpresas de la solicitud de exámenes (papel y sistema). Selección marcada por Ismary en Talonarios/Referencia/listado para formatos fisicos.jpeg. El generador calcula la posición de cada casilla y la entrega al sistema en layout.exams.checklist.",
+    "boxMm": [
+      10,
+      89,
+      128,
+      85
+    ],
+    "headingTopMm": 91.5,
+    "dividerTopMm": 96,
+    "gridTopMm": 98,
+    "gridBottomMm": 173,
+    "columnXMm": [
+      14,
+      55,
+      96
+    ],
+    "columnWidthMm": 37,
+    "indentMm": 3.6,
+    "columns": [
+      [
+        {
+          "category": "Hematología",
+          "exams": [
+            "Hemograma",
+            "Grupo y Rh",
+            "Test Coombs directo",
+            "Test Coombs indirecto",
+            "Pruebas de coagulación",
+            "Hemoglobina glicosilada",
+            "Cinética de hierro",
+            "Ferritina"
+          ]
+        },
+        {
+          "category": "Bioquímicos",
+          "exams": [
+            "Bilirrubina total y conjugada",
+            "Glicemia",
+            "PTGO",
+            "LDH",
+            "Vitamina B12",
+            "25-hidroxivitamina D",
+            "Creatinina",
+            "Calcio",
+            "Magnesio",
+            "Electrolitos plasmáticos",
+            "Perfil lipídico",
+            "Perfil hepático",
+            "Perfil renal"
+          ]
+        }
+      ],
+      [
+        {
+          "category": "Orina",
+          "exams": [
+            "Orina completa",
+            "Urocultivo",
+            "Creatinina en orina (24 hrs)",
+            "Proteinuria"
+          ]
+        },
+        {
+          "category": "Hormonales",
+          "exams": [
+            "Estradiol",
+            "β-hCG",
+            "FSH",
+            "LH",
+            "Prolactina",
+            "Progesterona",
+            "Testosterona total",
+            "Testosterona libre",
+            "AMH (antimulleriana)",
+            "TSH",
+            "T3",
+            "T4",
+            "T4 libre",
+            "Insulina"
+          ]
+        },
+        {
+          "category": "Imágenes",
+          "exams": [
+            "Mamografía",
+            {
+              "type": "writein",
+              "label": "Ecografía"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "category": "Microbiológicos",
+          "exams": [
+            "Cultivo corriente",
+            "Cultivo de hongos",
+            "Cultivo de levaduras",
+            "Coprocultivo",
+            "Chagas",
+            "Cultivo para gonococo",
+            "Papanicolau",
+            "Prueba de VPH",
+            "Flujo vaginal",
+            "PCR ITS"
+          ]
+        },
+        {
+          "category": "Serológicos",
+          "exams": [
+            "VDRL",
+            "VIH",
+            "Hepatitis B Ag superficie",
+            "Proteína C reactiva (PCR)"
+          ]
+        },
+        {
+          "category": "",
+          "exams": [
+            {
+              "type": "note",
+              "label": "Otros"
+            }
+          ]
+        }
+      ]
+    ],
+    "noteBottomMm": 163
+  },
+  "layout": {
+    "recipe": {
+      "patient": [
+        28.08,
+        60.97,
+        107.92,
+        5
+      ],
+      "rut": [
+        21.86,
+        67.97,
+        55.14,
+        5
+      ],
+      "date": [
+        94.49,
+        67.97,
+        41.51,
+        5
+      ],
+      "age": [
+        23.43,
+        74.97,
+        16.57,
+        5
+      ],
+      "patientAddress": [
+        61.46,
+        74.97,
+        74.54,
+        5
+      ],
+      "diagnosis": [
+        32.86,
+        81.97,
+        103.14,
+        5
+      ],
+      "prescription": [
+        28.6,
+        90.97,
+        107.4,
+        42
+      ],
+      "indications": [
+        13.6,
+        137.97,
+        122.4,
+        21
+      ]
+    },
+    "exams": {
+      "patient": [
+        28.08,
+        60.97,
+        107.92,
+        5
+      ],
+      "rut": [
+        21.86,
+        67.97,
+        55.14,
+        5
+      ],
+      "age": [
+        93.43,
+        67.97,
+        42.57,
+        5
+      ],
+      "birthDate": [
+        25.65,
+        74.97,
+        51.35,
+        5
+      ],
+      "date": [
+        94.49,
+        74.97,
+        41.51,
+        5
+      ],
+      "patientAddress": [
+        29.46,
+        81.97,
+        106.54,
+        5
+      ],
+      "checklist": {
+        "boxes": {
+          "Hemograma": [
+            14,
+            103.43,
+            2.1
+          ],
+          "Grupo y Rh": [
+            14,
+            106.52,
+            2.1
+          ],
+          "Test Coombs directo": [
+            14,
+            109.61,
+            2.1
+          ],
+          "Test Coombs indirecto": [
+            14,
+            112.7,
+            2.1
+          ],
+          "Pruebas de coagulación": [
+            14,
+            115.79,
+            2.1
+          ],
+          "Hemoglobina glicosilada": [
+            14,
+            118.88,
+            2.1
+          ],
+          "Cinética de hierro": [
+            14,
+            121.97,
+            2.1
+          ],
+          "Ferritina": [
+            14,
+            125.06,
+            2.1
+          ],
+          "Bilirrubina total y conjugada": [
+            14,
+            132.49,
+            2.1
+          ],
+          "Glicemia": [
+            14,
+            135.57,
+            2.1
+          ],
+          "PTGO": [
+            14,
+            138.66,
+            2.1
+          ],
+          "LDH": [
+            14,
+            141.75,
+            2.1
+          ],
+          "Vitamina B12": [
+            14,
+            144.84,
+            2.1
+          ],
+          "25-hidroxivitamina D": [
+            14,
+            147.93,
+            2.1
+          ],
+          "Creatinina": [
+            14,
+            151.02,
+            2.1
+          ],
+          "Calcio": [
+            14,
+            154.11,
+            2.1
+          ],
+          "Magnesio": [
+            14,
+            157.2,
+            2.1
+          ],
+          "Electrolitos plasmáticos": [
+            14,
+            160.29,
+            2.1
+          ],
+          "Perfil lipídico (colesterol, HDL, LDL, triglicéridos)": [
+            14,
+            163.38,
+            2.1
+          ],
+          "Perfil hepático (bilirrubina, GOT/AST, GPT/ALT, fosfatasas alcalinas, GGT, albúmina)": [
+            14,
+            166.47,
+            2.1
+          ],
+          "Perfil renal (BUN, creatinina, TFG, electrolitos plasmáticos)": [
+            14,
+            169.56,
+            2.1
+          ],
+          "Orina completa": [
+            55,
+            103.43,
+            2.1
+          ],
+          "Urocultivo": [
+            55,
+            106.52,
+            2.1
+          ],
+          "Creatinina en orina (24 hrs)": [
+            55,
+            109.61,
+            2.1
+          ],
+          "Proteinuria": [
+            55,
+            112.7,
+            2.1
+          ],
+          "Estradiol": [
+            55,
+            120.13,
+            2.1
+          ],
+          "β-hCG": [
+            55,
+            123.22,
+            2.1
+          ],
+          "FSH": [
+            55,
+            126.31,
+            2.1
+          ],
+          "LH": [
+            55,
+            129.4,
+            2.1
+          ],
+          "Prolactina": [
+            55,
+            132.49,
+            2.1
+          ],
+          "Progesterona": [
+            55,
+            135.57,
+            2.1
+          ],
+          "Testosterona total": [
+            55,
+            138.66,
+            2.1
+          ],
+          "Testosterona libre": [
+            55,
+            141.75,
+            2.1
+          ],
+          "AMH (antimulleriana)": [
+            55,
+            144.84,
+            2.1
+          ],
+          "TSH": [
+            55,
+            147.93,
+            2.1
+          ],
+          "T3": [
+            55,
+            151.02,
+            2.1
+          ],
+          "T4": [
+            55,
+            154.11,
+            2.1
+          ],
+          "T4 libre": [
+            55,
+            157.2,
+            2.1
+          ],
+          "Insulina": [
+            55,
+            160.29,
+            2.1
+          ],
+          "Mamografía": [
+            55,
+            167.72,
+            2.1
+          ],
+          "Ecografía": [
+            55,
+            170.8,
+            2.1
+          ],
+          "Cultivo corriente": [
+            96,
+            103.43,
+            2.1
+          ],
+          "Cultivo de hongos": [
+            96,
+            106.52,
+            2.1
+          ],
+          "Cultivo de levaduras": [
+            96,
+            109.61,
+            2.1
+          ],
+          "Coprocultivo": [
+            96,
+            112.7,
+            2.1
+          ],
+          "Chagas": [
+            96,
+            115.79,
+            2.1
+          ],
+          "Cultivo para gonococo": [
+            96,
+            118.88,
+            2.1
+          ],
+          "Papanicolau": [
+            96,
+            121.97,
+            2.1
+          ],
+          "Prueba de VPH": [
+            96,
+            125.06,
+            2.1
+          ],
+          "Flujo vaginal": [
+            96,
+            128.15,
+            2.1
+          ],
+          "PCR ITS": [
+            96,
+            131.24,
+            2.1
+          ],
+          "VDRL": [
+            96,
+            138.66,
+            2.1
+          ],
+          "VIH": [
+            96,
+            141.75,
+            2.1
+          ],
+          "Hepatitis B Ag superficie": [
+            96,
+            144.84,
+            2.1
+          ],
+          "Proteína C reactiva (PCR)": [
+            96,
+            147.93,
+            2.1
+          ],
+          "Otros": [
+            96,
+            151.62,
+            2.1
+          ]
+        },
+        "lines": {
+          "Ecografía": {
+            "area": [
+              70.11,
+              169.71,
+              21.89,
+              3.2
+            ]
+          },
+          "Otros": {
+            "area": [
+              99.6,
+              150.52,
+              33.4,
+              12.48
+            ],
+            "firstLineIndentMm": 7.73,
+            "lineHeightMm": 3.09
+          }
+        }
+      }
+    }
+  }
 }

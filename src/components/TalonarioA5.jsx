@@ -5,11 +5,11 @@ import "./TalonarioA5.css";
 const formatoFecha = (valor = "") => valor.replace(/^(\d{4})-(\d{2})-(\d{2})$/, "$3 / $2 / $1");
 const milimetros = (valor) => `${valor}mm`;
 
-function Dato({ area, valor, multilinea = false, pequeno = false }) {
+function Dato({ area, valor, multilinea = false }) {
   const [x, y, ancho, alto] = area;
   return (
     <span
-      className={`talonario-data${multilinea ? " talonario-data--multiline" : ""}${pequeno ? " talonario-data--small" : ""}`}
+      className={`talonario-data${multilinea ? " talonario-data--multiline" : ""}`}
       style={{ left: milimetros(x), top: milimetros(y), width: milimetros(ancho), height: milimetros(alto) }}
     >
       {valor || ""}
@@ -17,14 +17,28 @@ function Dato({ area, valor, multilinea = false, pequeno = false }) {
   );
 }
 
-export default function TalonarioA5({ tipo, paciente, fechaDocumento, folio, domicilio, diagnostico, prescripcion, indicaciones, examenes = [], otros = "", observaciones = "" }) {
+function Area({ area, className = "", style, children }) {
+  const [x, y, ancho, alto] = area;
+  return (
+    <span className={`talonario-data ${className}`} style={{ left: milimetros(x), top: milimetros(y), width: milimetros(ancho), height: milimetros(alto), ...style }}>
+      {children}
+    </span>
+  );
+}
+
+export default function TalonarioA5({ tipo, paciente, fechaDocumento, domicilio, diagnostico, prescripcion, indicaciones, examenes = [], otros = "", observaciones = "", tipoEcografia = "" }) {
   const hojaRef = useRef(null);
   const [errorImpresion, setErrorImpresion] = useState("");
   const esReceta = tipo === "recipe";
   const campos = configuracion.layout[tipo];
   const documento = configuracion.documents[tipo];
+  const casillas = configuracion.layout.exams.checklist;
   const otrosExamenes = otros.split(/\r?\n|;/).map((valor) => valor.trim()).filter(Boolean);
-  const examenesImpresos = [...examenes, ...otrosExamenes];
+  const sinCasilla = examenes.filter((examen) => !casillas.boxes[examen]);
+  const textoOtros = [...sinCasilla, ...otrosExamenes, observaciones.trim()].filter(Boolean).join(", ");
+  const marcados = [...examenes.filter((examen) => casillas.boxes[examen]), ...(textoOtros ? ["Otros"] : [])];
+  const lineaEcografia = casillas.lines["Ecografía"];
+  const lineaOtros = casillas.lines["Otros"];
 
   function imprimir() {
     const hoja = hojaRef.current;
@@ -34,7 +48,7 @@ export default function TalonarioA5({ tipo, paciente, fechaDocumento, folio, dom
       setErrorImpresion("El formato todavía se está cargando. Intenta de nuevo.");
       return;
     }
-    const contenido = hoja.querySelectorAll(".talonario-data, .talonario-exam-list");
+    const contenido = hoja.querySelectorAll(".talonario-data");
     if ([...contenido].some((elemento) => elemento.scrollHeight > elemento.clientHeight + 1 || elemento.scrollWidth > elemento.clientWidth + 1)) {
       setErrorImpresion("Hay contenido que no cabe en la hoja A5. Acórtalo antes de imprimir o guardar el PDF.");
       return;
@@ -71,7 +85,6 @@ export default function TalonarioA5({ tipo, paciente, fechaDocumento, folio, dom
           <Dato area={campos.age} valor={String(paciente.edad ?? "")} />
           <Dato area={campos.date} valor={formatoFecha(fechaDocumento)} />
           <Dato area={campos.patientAddress} valor={domicilio} />
-          <Dato area={campos.folio} valor={folio} pequeno />
           {esReceta ? (
             <>
               <Dato area={configuracion.layout.recipe.diagnosis} valor={diagnostico} />
@@ -81,18 +94,24 @@ export default function TalonarioA5({ tipo, paciente, fechaDocumento, folio, dom
           ) : (
             <>
               <Dato area={configuracion.layout.exams.birthDate} valor={formatoFecha(paciente.fechaNacimiento)} />
-              <Dato area={configuracion.layout.exams.observations} valor={observaciones} />
-              <div
-                className="talonario-exam-list"
-                style={{ left: milimetros(campos.examList[0]), top: milimetros(campos.examList[1]), width: milimetros(campos.examList[2]), height: milimetros(campos.examList[3]), gridTemplateColumns: `repeat(${configuracion.examList.columns}, minmax(0, 1fr))` }}
-              >
-                {examenesImpresos.map((examen, indice) => (
-                  <span className="talonario-exam-item" key={`${examen}-${indice}`}>
-                    {configuracion.examList.showCheckbox && <span className="talonario-exam-check" aria-hidden="true">✓</span>}
-                    <span>{examen}</span>
+              {marcados.map((nombre) => {
+                const [x, y, lado] = casillas.boxes[nombre];
+                return (
+                  <span key={nombre} className="talonario-check" aria-label={`Marcado: ${nombre}`} style={{ left: milimetros(x), top: milimetros(y), width: milimetros(lado), height: milimetros(lado) }}>
+                    ✓
                   </span>
-                ))}
-              </div>
+                );
+              })}
+              <Area area={lineaEcografia.area} className="talonario-data--linea">
+                {examenes.includes("Ecografía") ? tipoEcografia : ""}
+              </Area>
+              <Area
+                area={lineaOtros.area}
+                className="talonario-data--otros"
+                style={{ textIndent: milimetros(lineaOtros.firstLineIndentMm), lineHeight: milimetros(lineaOtros.lineHeightMm) }}
+              >
+                {textoOtros}
+              </Area>
             </>
           )}
         </article>

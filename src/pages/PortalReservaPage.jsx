@@ -1,6 +1,7 @@
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useClinica } from "../data/store";
-import { addDays, dayNumber, getMonthGrid, parseISODate } from "../utils/date";
+import { addDays, formatLongDate } from "../utils/date";
 import { HOY } from "../utils/today";
 import {
   isValidRut,
@@ -12,77 +13,12 @@ import {
   maskName,
   isMaskedValue,
 } from "../utils/rut";
-import HojaTalonario from "../components/HojaTalonario";
 import { findPossibleDuplicate } from "../utils/duplicates";
-import { loadPublishedWeeks, isWeekPublished } from "../utils/availability";
-
-// Cada modalidad define qué días de la semana está disponible (0=domingo,
-// 6=sábado, como Date.getDay()) y qué horarios ofrece — así elegir la
-// modalidad primero es lo que realmente determina días y horas después.
-const MODALIDADES = {
-  tele: {
-    key: "tele",
-    label: "Teleconsulta",
-    valor: "Teleconsulta",
-    icono: "videocam",
-    desc: "Por videollamada, desde donde estés.",
-    dias: [1, 2, 3, 4, 5, 6],
-    horas: ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
-  },
-  domicilio: {
-    key: "domicilio",
-    label: "A domicilio",
-    valor: "Domicilio",
-    icono: "home",
-    desc: "Ismary te visita en La Serena o Coquimbo.",
-    dias: [2, 4, 6],
-    horas: ["09:00", "11:30", "14:00", "16:30"],
-  },
-  presencial: {
-    key: "presencial",
-    label: "Presencial",
-    valor: "Box Clínico",
-    icono: "apartment",
-    desc: "En box clínico habilitado.",
-    dias: [1, 3, 5],
-    horas: ["09:00", "10:30", "12:00", "15:00", "16:30"],
-  },
-};
-
-const SERVICIOS = [
-  {
-    key: "diada",
-    nombre: "Control Posparto de la Díada y Lactancia",
-    duracion: "90 min",
-    arancel: "$55.000 – $65.000",
-    icono: "family_restroom",
-    modalidades: ["domicilio", "presencial"],
-  },
-  {
-    key: "lactancia",
-    nombre: "Asesoría de Lactancia a Domicilio",
-    duracion: "75–90 min",
-    arancel: "$45.000 – $55.000",
-    icono: "child_care",
-    modalidades: ["domicilio", "tele"],
-  },
-  {
-    key: "prenatal",
-    nombre: "Control Prenatal de Bajo Riesgo",
-    duracion: "60 min",
-    arancel: "$40.000 – $50.000",
-    icono: "pregnant_woman",
-    modalidades: ["presencial", "domicilio"],
-  },
-  {
-    key: "sexual",
-    nombre: "Consulta Online de Salud Sexual y Reproductiva",
-    duracion: "30–40 min",
-    arancel: "$18.000 – $25.000",
-    icono: "health_and_safety",
-    modalidades: ["tele"],
-  },
-];
+import { MODALIDADES, SERVICIOS } from "../data/servicios";
+import { getAvailableSlots } from "../utils/scheduling";
+import ServiceCard from "../components/ServiceCard";
+import CalendarioReserva from "../components/CalendarioReserva";
+import ConfirmacionReserva from "../components/ConfirmacionReserva";
 
 const PASOS = [
   { key: "rut", label: "RUT" },
@@ -97,7 +33,13 @@ function nextDays(n) {
 }
 
 export default function PortalReservaPage() {
-  const { patients, addPatient, updatePatient, addWebRequest, findPatientByRut } = useClinica();
+  const { patients, appointments, webRequests, config, semanasPublicadas, bookAppointment, findPatientByRut } = useClinica();
+  const [searchParams] = useSearchParams();
+  const portalRef = useRef(null);
+  const sendingRef = useRef(false);
+  const [sending, setSending] = useState(false);
+  const [reservaError, setReservaError] = useState("");
+  const [solicitud, setSolicitud] = useState(null);
 
   const [step, setStep] = useState("rut");
   const [rutInput, setRutInput] = useState("");
@@ -105,15 +47,20 @@ export default function PortalReservaPage() {
   const [existingPatient, setExistingPatient] = useState(null);
   const [isNewPatient, setIsNewPatient] = useState(false);
 
-  const [servicio, setServicio] = useState(null);
+  const [servicio, setServicio] = useState(() => SERVICIOS.find((s) => s.key === searchParams.get("servicio")) || null);
   const [modalidad, setModalidad] = useState(null);
   const [fecha, setFecha] = useState(null);
   const [hora, setHora] = useState(null);
-  const semanasPublicadas = useMemo(() => loadPublishedWeeks(), []);
-  const diasDisponiblesVentana = useMemo(
-    () => nextDays(9).filter((iso) => isWeekPublished(semanasPublicadas, iso)),
-    [semanasPublicadas]
-  );
+  const disponibilidad = useMemo(() => ({ config, appointments, webRequests, publishedWeeks: semanasPublicadas }), [config, appointments, webRequests, semanasPublicadas]);
+  const diasDisponiblesVentana = useMemo(() => nextDays(35).filter((iso) => getAvailableSlots({ ...disponibilidad, fecha: iso, servicio, modalidad }).length > 0), [disponibilidad, servicio, modalidad]);
+  const horasDisponibles = getAvailableSlots({ ...disponibilidad, fecha, servicio, modalidad });
+  const modalidadesDisponibles = servicio?.modalidades.filter((key) => config.modalidadesActivas.includes(MODALIDADES[key].valor)) || [];
+
+  useEffect(() => {
+    const title = portalRef.current?.querySelector("h1");
+    if (title) { title.tabIndex = -1; title.focus({ preventScroll: true }); }
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [step]);
 
   const [datosNuevo, setDatosNuevo] = useState({
     nombre: "",
@@ -150,6 +97,9 @@ export default function PortalReservaPage() {
     }
     setRutError(null);
     const found = findPatientByRut(rutInput);
+    setExistingPatient(null);
+    setPosibleDuplicado(false);
+    setReservaError("");
     if (found) {
       setExistingPatient(found);
       setIsNewPatient(false);
@@ -168,61 +118,64 @@ export default function PortalReservaPage() {
       setStep("coincidencia");
     } else {
       setPosibleDuplicado(false);
-      setStep("servicio");
+      setStep(servicio ? "modalidad" : "servicio");
     }
   }
 
   function elegirModalidad(m) {
+    setReservaError("");
     setModalidad(m);
     setFecha(null);
     setHora(null);
     setStep("horario");
   }
 
-  function confirmarReserva() {
-    let pacienteId;
+  async function confirmarReserva() {
+    if (sendingRef.current || !aceptaConfirmacion || !horasDisponibles.includes(hora)) return;
+    const patch = {};
     if (existingPatient) {
-      pacienteId = existingPatient.id;
-      const patch = {};
       if (!isMaskedValue(datosExistente.telefono)) patch.telefono = datosExistente.telefono;
       if (!isMaskedValue(datosExistente.email)) patch.email = datosExistente.email;
-      if (!isMaskedValue(datosExistente.direccion)) patch.comuna = datosExistente.direccion;
-      if (Object.keys(patch).length > 0) updatePatient(pacienteId, patch);
-    } else {
-      const nuevo = addPatient({
-        id: `p-${Date.now()}`,
-        nombre: datosNuevo.nombre,
-        rut: formatRut(rutInput),
-        edad: null,
-        fechaNacimiento: datosNuevo.fechaNacimiento,
-        prevision: "Por definir",
-        telefono: datosNuevo.telefono,
-        email: datosNuevo.email,
-        comuna: datosNuevo.direccion || null,
-        gestante: false,
-        alertas: [],
-        resumen: "Paciente nueva (reserva web)",
-        estadoPerfil: "provisional",
-        posibleDuplicado,
-      });
-      pacienteId = nuevo.id;
+      if (datosExistente.direccion !== maskAddress(existingPatient.comuna) && !isMaskedValue(datosExistente.direccion)) {
+        patch.comuna = datosExistente.direccion;
+        patch.domicilio = datosExistente.direccion;
+      }
+      if (patch.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(patch.email)) { setReservaError("Revisa tu correo de contacto en el paso Datos."); return; }
+      if (patch.telefono && patch.telefono.replace(/\D/g, "").length < 11) { setReservaError("Revisa tu teléfono de contacto en el paso Datos."); return; }
     }
-    addWebRequest({
-      pacienteId,
-      tipo: servicio.nombre,
-      fecha,
-      hora,
-      modalidad: modalidad.valor,
-    });
-    setStep("confirmacion");
+    sendingRef.current = true;
+    setSending(true);
+    setReservaError("");
+    try {
+      const result = await bookAppointment({
+        booking: { servicioKey: servicio.key, modalidadKey: modalidad.key, fecha, hora },
+        patientId: existingPatient?.id,
+        patientPatch: patch,
+        newPatient: existingPatient ? null : { ...datosNuevo, rut: rutInput, posibleDuplicado },
+        publicRequest: true,
+      });
+      if (result.error) { setReservaError(result.error); return; }
+      setSolicitud(result.record);
+      setStep("confirmacion");
+    } catch { setReservaError("No pudimos enviar la solicitud. Intenta nuevamente."); }
+    finally { sendingRef.current = false; setSending(false); }
   }
 
   return (
-    <div className="w-full max-w-3xl">
-      {step !== "confirmacion" && <StepIndicator pasoActual={pasoActual} />}
-
-      <HojaTalonario>
-        <div className="p-space-lg">
+    <div className="public-reservation" ref={portalRef}>
+      <aside className="booking-aside">
+        <Link to="/" className="booking-back">← Volver a la presentación</Link>
+        <p className="public-eyebrow">RESERVA EN LÍNEA</p>
+        <p className="booking-aside-title">Un momento para cuidar de ti.</p>
+        <p className="booking-aside-description">Elige la atención y el horario que mejor se ajustan a lo que necesitas. Puedes avanzar a tu ritmo.</p>
+        <div className="booking-demo-note"><strong>Vista de demostración</strong><span>Las solicitudes se guardan solo en este navegador. Para coordinar una atención real, escribe a <a href="https://www.instagram.com/ismary.mt/" target="_blank" rel="noreferrer">@ismary.mt</a>.</span></div>
+      </aside>
+      <div className="booking-workspace">
+        {step !== "confirmacion" && <>
+          <StepIndicator pasoActual={pasoActual} />
+          {servicio && <div className="reservation-summary"><strong>{servicio.nombre}</strong>{modalidad && <span>{modalidad.label}</span>}{fecha && <span>{formatLongDate(fecha)}{hora ? ` · ${hora}` : ""}</span>}</div>}
+        </>}
+        <div className="booking-card"><div className="booking-card-inner">
         {step === "rut" && (
           <>
             <h1 className="font-headline-md text-headline-md text-primary mb-1">Reserva tu hora</h1>
@@ -289,17 +242,14 @@ export default function PortalReservaPage() {
             </button>
             <h1 className="font-headline-md text-headline-md text-primary mb-space-sm">Selecciona el servicio</h1>
             <div className="flex flex-col gap-space-sm">
-              {SERVICIOS.map((s) => (
+              {SERVICIOS.map((s, index) => (
                 <button
                   key={s.key}
-                  onClick={() => { setServicio(s); setModalidad(null); setStep("modalidad"); }}
-                  className="text-left border border-surface-container rounded-xl p-space-md hover:border-primary hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-space-sm"
+                  onClick={() => { setServicio(s); setModalidad(null); setFecha(null); setHora(null); setReservaError(""); setStep("modalidad"); }}
+                  className="text-left rounded-[18px] hover:shadow-md transition-shadow"
+                  aria-pressed={servicio?.key === s.key}
                 >
-                  <div>
-                    <p className="font-title-md text-title-md text-on-surface">{s.nombre}</p>
-                    <p className="text-body-sm text-on-surface-variant">{s.duracion}</p>
-                  </div>
-                  <span className="font-label-lg text-label-lg text-primary shrink-0">{s.arancel}</span>
+                  <ServiceCard servicio={s} selected={servicio?.key === s.key} index={index + 1} />
                 </button>
               ))}
             </div>
@@ -313,8 +263,9 @@ export default function PortalReservaPage() {
             </button>
             <h1 className="font-headline-md text-headline-md text-primary mb-1">¿Cómo prefieres tu atención?</h1>
             <p className="text-body-sm text-on-surface-variant mb-space-md">{servicio.nombre}</p>
+            {modalidadesDisponibles.length === 0 && <p className="text-body-sm text-status-pendiente mb-4">No hay modalidades habilitadas para este servicio. Puedes elegir otra atención o escribir a @ismary.mt.</p>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
-              {servicio.modalidades.map((key) => {
+              {modalidadesDisponibles.map((key) => {
                 const m = MODALIDADES[key];
                 return (
                   <button
@@ -322,6 +273,7 @@ export default function PortalReservaPage() {
                     onClick={() => elegirModalidad(m)}
                     className="text-left border border-surface-container rounded-xl p-space-md hover:border-primary hover:shadow-md transition-all flex flex-col items-start gap-space-xs"
                   >
+                    <span className="material-symbols-outlined text-primary mb-2" aria-hidden="true">{m.icono}</span>
                     <p className="font-title-sm text-title-sm text-on-surface">{m.label}</p>
                     <p className="text-body-sm text-on-surface-variant">{m.desc}</p>
                   </button>
@@ -348,27 +300,28 @@ export default function PortalReservaPage() {
               <div className="flex items-start gap-2 bg-status-pendiente-bg text-status-pendiente rounded-lg p-space-md mb-space-md">
                 <span className="material-symbols-outlined text-[20px] shrink-0">event_busy</span>
                 <p className="text-body-sm">
-                  Ismary aún no ha publicado horarios disponibles para los próximos días. Vuelve a intentarlo pronto o escríbenos directamente para coordinar tu hora.
+                  No hay horarios disponibles para esta atención en las próximas semanas. Puedes cambiar de modalidad o escribir a @ismary.mt para coordinar.
                 </p>
               </div>
             ) : (
-              <MiniCalendario
-                ventana={diasDisponiblesVentana}
-                diasHabilesModalidad={modalidad.dias}
+              <CalendarioReserva
+                fechas={diasDisponiblesVentana}
                 fecha={fecha}
                 onSelect={(d) => {
                   setFecha(d);
                   setHora(null);
+                  setReservaError("");
                 }}
               />
             )}
 
             {fecha && (
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 my-space-md">
-                {modalidad.horas.map((h) => (
+                {horasDisponibles.map((h) => (
                   <button
                     key={h}
-                    onClick={() => setHora(h)}
+                    onClick={() => { setHora(h); setReservaError(""); }}
+                    aria-pressed={hora === h}
                     className={`rounded-lg py-2 font-label-lg text-label-lg border transition-colors ${
                       hora === h ? "bg-primary text-on-primary border-primary" : "border-surface-container hover:border-primary"
                     }`}
@@ -382,10 +335,14 @@ export default function PortalReservaPage() {
               <div className="flex items-start gap-2 bg-status-pendiente-bg text-status-pendiente rounded-lg p-space-sm mb-space-md">
                 <span className="material-symbols-outlined text-[18px] shrink-0">schedule</span>
                 <p className="text-body-sm">
-                  Tu hora quedará <strong>retenida por 10 minutos</strong> mientras completas los siguientes pasos.
+                  Comprobaremos la disponibilidad al enviar. Tu solicitud quedará pendiente de confirmación por Ismary.
                 </p>
               </div>
             )}
+            {fecha && horasDisponibles.length === 0 && <p role="status" className="text-body-sm text-status-pendiente mb-4">Ya no quedan horarios para ese día. Elige otra fecha.</p>}
+            {hora && !horasDisponibles.includes(hora) && <p role="alert" className="text-body-sm text-status-pendiente mb-4">El horario elegido dejó de estar disponible. Selecciona otro.</p>}
+            {reservaError && <p role="alert" className="text-body-sm text-status-cancelada mb-4">{reservaError}</p>}
+            <p className="text-body-sm text-on-surface-variant mb-4">Horario de Chile continental. Reservamos {servicio.duracionMin} minutos para esta atención.</p>
             <label className="flex items-start gap-2.5 cursor-pointer select-none mb-space-md">
               <input
                 type="checkbox"
@@ -394,15 +351,15 @@ export default function PortalReservaPage() {
                 className="w-4 h-4 mt-0.5 rounded accent-primary"
               />
               <span className="text-body-sm text-on-surface leading-tight">
-                Acepto recibir la confirmación administrativa de esta reserva por correo, junto con la política de privacidad.
+                Acepto que Ismary use mis datos de contacto para coordinar esta solicitud de atención.
               </span>
             </label>
             <button
-              disabled={!fecha || !hora || !aceptaConfirmacion}
+              disabled={sending || !fecha || !horasDisponibles.includes(hora) || !aceptaConfirmacion}
               onClick={confirmarReserva}
               className="w-full h-11 rounded-lg bg-primary-container text-on-primary font-title-sm text-title-sm font-semibold disabled:opacity-40"
             >
-              Confirmar Reserva
+              {sending ? "Enviando solicitud…" : "Solicitar hora"}
             </button>
           </>
         )}
@@ -434,7 +391,7 @@ export default function PortalReservaPage() {
               />
             </div>
             <button
-              onClick={() => setStep("servicio")}
+              onClick={() => setStep(servicio ? "modalidad" : "servicio")}
               className="w-full h-11 rounded-lg bg-primary-container text-on-primary font-title-sm text-title-sm font-semibold mt-space-md"
             >
               Continuar
@@ -498,7 +455,7 @@ export default function PortalReservaPage() {
               <button
                 onClick={() => {
                   setPosibleDuplicado(true);
-                  setStep("servicio");
+                  setStep(servicio ? "modalidad" : "servicio");
                 }}
                 className="flex-1 h-11 rounded-lg bg-primary-container text-on-primary font-title-sm text-title-sm font-semibold"
               >
@@ -508,50 +465,31 @@ export default function PortalReservaPage() {
           </>
         )}
 
-        {step === "confirmacion" && (
-          <div className="text-center py-space-lg">
-            <span className="material-symbols-outlined text-[48px] text-status-confirmada">check_circle</span>
-            <h1 className="font-headline-md text-headline-md text-primary mt-space-sm">¡Reserva enviada!</h1>
-            <p className="text-body-md text-on-surface-variant mt-1">
-              {servicio.nombre} · {modalidad.label} · {fecha} · {hora}
-            </p>
-            <p className="text-body-sm text-on-surface-variant mt-space-sm max-w-md mx-auto">
-              Tu hora queda <strong>pendiente de confirmación</strong>. Te enviaremos un correo apenas Ismary la confirme,
-              junto con los datos para la transferencia y las instrucciones previas a tu cita.
-            </p>
-            <div className="flex items-center justify-center gap-space-sm mt-space-md">
-              <button className="px-space-md py-2 rounded-lg border border-surface-container text-on-surface font-label-lg text-label-lg hover:bg-surface-container-low">
-                Agregar a Google Calendar
-              </button>
-              <button className="px-space-md py-2 rounded-lg border border-surface-container text-on-surface font-label-lg text-label-lg hover:bg-surface-container-low">
-                Agregar a Apple Calendar
-              </button>
-            </div>
-          </div>
-        )}
-        </div>
-      </HojaTalonario>
+        {step === "confirmacion" && solicitud && <ConfirmacionReserva solicitud={solicitud} />}
+
+        </div></div>
+      </div>
     </div>
   );
 }
 
 function StepIndicator({ pasoActual }) {
   return (
-    <ol className="flex items-start justify-between gap-1 mb-space-lg relative z-10">
+    <ol className="booking-steps">
       {PASOS.map((p, i) => {
         const completado = i < pasoActual;
         const activo = i === pasoActual;
         return (
-          <li key={p.key} aria-current={activo ? "step" : undefined} className="flex-1 flex flex-col items-center gap-1">
+          <li key={p.key} aria-current={activo ? "step" : undefined} className={`booking-step ${activo ? "booking-step-active" : ""} ${completado ? "booking-step-done" : ""}`}>
             <span
-              className={`w-8 h-8 rounded-full flex items-center justify-center font-label-lg text-label-lg font-semibold transition-colors ${
+              className={`booking-step-number ${
                 completado || activo ? "bg-primary text-on-primary" : "bg-surface-container-high text-on-surface-variant"
               }`}
             >
               {completado ? <span className="material-symbols-outlined text-[16px]">check</span> : i + 1}
             </span>
             <span
-              className={`text-[12px] uppercase tracking-wide text-center ${
+              className={`booking-step-label ${
                 activo ? "text-primary font-semibold" : "text-on-surface-variant"
               }`}
             >
@@ -561,57 +499,6 @@ function StepIndicator({ pasoActual }) {
         );
       })}
     </ol>
-  );
-}
-
-// Calendario mensual real (no una fila de días desplazable): resalta el mes
-// vigente y solo deja seleccionar los días dentro de la ventana de reservas
-// que además caen en un día hábil para la modalidad elegida.
-function MiniCalendario({ ventana, diasHabilesModalidad, fecha, onSelect }) {
-  const { cells, label } = useMemo(() => getMonthGrid(HOY), []);
-  const ventanaSet = useMemo(() => new Set(ventana), [ventana]);
-
-  return (
-    <div className="border border-surface-container rounded-xl p-space-md mb-space-md">
-      <p className="font-title-sm text-title-sm text-primary text-center mb-space-sm capitalize">{label}</p>
-      <div className="grid grid-cols-7 gap-1 text-center mb-1">
-        {["L", "M", "M", "J", "V", "S", "D"].map((d, i) => (
-          <span key={i} className="text-[12px] font-label-md text-secondary">{d}</span>
-        ))}
-      </div>
-      <div className="grid grid-cols-7 gap-1">
-        {cells.map(({ iso, inMonth }) => {
-          const disponible = inMonth && ventanaSet.has(iso) && diasHabilesModalidad.includes(parseISODate(iso).getDay());
-          const seleccionado = fecha === iso;
-          return (
-            <button
-              key={iso}
-              disabled={!disponible}
-              onClick={() => onSelect(iso)}
-              className={`aspect-square rounded-lg text-body-sm transition-colors ${
-                !inMonth
-                  ? "text-transparent"
-                  : seleccionado
-                  ? "bg-primary text-on-primary font-semibold"
-                  : disponible
-                  ? "bg-status-confirmada-bg text-on-surface hover:bg-primary hover:text-on-primary"
-                  : "text-on-surface-variant/40"
-              }`}
-            >
-              {dayNumber(iso)}
-            </button>
-          );
-        })}
-      </div>
-      <div className="flex items-center gap-space-md mt-space-sm text-body-sm text-on-surface-variant">
-        <span className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-status-confirmada-bg border border-status-confirmada" /> Disponible
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-primary" /> Elegido
-        </span>
-      </div>
-    </div>
   );
 }
 

@@ -1,11 +1,15 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   loadPatients,
   loadAppointments,
   loadWebRequests,
   loadDocuments,
 } from "./mockData";
-import { nowHHMM } from "../utils/today";
+import { HOY, nowHHMM } from "../utils/today";
+import { loadConfig } from "../utils/configuracion";
+import { loadPublishedWeeks } from "../utils/availability";
+import { prepareBooking } from "../utils/booking";
+import { confirmRequest, hasConflict, durationOf, validDate, minutesOfDay } from "../utils/scheduling";
 
 const ClinicaContext = createContext(null);
 
@@ -23,6 +27,8 @@ export function ClinicaProvider({ children }) {
   const [appointments, setAppointments] = useState(loadAppointments);
   const [webRequests, setWebRequests] = useState(loadWebRequests);
   const [documents, setDocuments] = useState(loadDocuments);
+  const [config, setConfig] = useState(loadConfig);
+  const [semanasPublicadas, setSemanasPublicadas] = useState(loadPublishedWeeks);
   const [session, setSession] = useState(() => {
     try {
       return JSON.parse(window.localStorage.getItem("ismary_session") || "null");
@@ -36,6 +42,65 @@ export function ClinicaProvider({ children }) {
   useEffect(() => persist("ismary_web_requests", webRequests), [webRequests]);
   useEffect(() => persist("ismary_documents", documents), [documents]);
   useEffect(() => persist("ismary_session", session), [session]);
+  useEffect(() => persist("ismary_config", config), [config]);
+  useEffect(() => persist("ismary_availability_weeks", semanasPublicadas), [semanasPublicadas]);
+
+  const currentRef = useRef(null);
+  useLayoutEffect(() => {
+    currentRef.current = { patients, appointments, webRequests, config, publishedWeeks: semanasPublicadas };
+  }, [patients, appointments, webRequests, config, semanasPublicadas]);
+
+  useEffect(() => {
+    function sync(event) {
+      if (event.storageArea !== window.localStorage || !event.newValue) return;
+      const setters = { ismary_patients: setPatients, ismary_appointments: setAppointments,
+        ismary_web_requests: setWebRequests, ismary_config: setConfig, ismary_availability_weeks: setSemanasPublicadas };
+      try { setters[event.key]?.(JSON.parse(event.newValue)); } catch { /* conservar el último estado válido */ }
+    }
+    window.addEventListener("storage", sync);
+    return () => window.removeEventListener("storage", sync);
+  }, []);
+
+  // Serializa las reservas de las pestañas de este navegador. La coordinación
+  // entre dispositivos requiere el servidor del sistema productivo.
+  function schedulingTransaction(change) {
+    const run = () => {
+      const state = { ...currentRef.current };
+      const keys = { patients: "ismary_patients", appointments: "ismary_appointments", webRequests: "ismary_web_requests",
+        config: "ismary_config", publishedWeeks: "ismary_availability_weeks" };
+      try {
+        for (const [name, key] of Object.entries(keys)) {
+          const raw = window.localStorage.getItem(key);
+          if (raw) state[name] = JSON.parse(raw);
+        }
+      } catch { return { error: "No pudimos leer la agenda guardada. Intenta nuevamente antes de reservar." }; }
+      const result = change(state);
+      if (result.error) return result;
+      const setters = { patients: setPatients, appointments: setAppointments, webRequests: setWebRequests };
+      const previous = {};
+      try {
+        for (const name of Object.keys(setters)) {
+          if (!result[name]) continue;
+          previous[keys[name]] = window.localStorage.getItem(keys[name]);
+          window.localStorage.setItem(keys[name], JSON.stringify(result[name]));
+        }
+      } catch {
+        for (const [key, value] of Object.entries(previous)) {
+          try { if (value === null) window.localStorage.removeItem(key); else window.localStorage.setItem(key, value); } catch { /* el navegador no permite guardar */ }
+        }
+        return { error: "No pudimos guardar la reserva en este navegador. Revisa el espacio disponible e intenta nuevamente." };
+      }
+      for (const [name, setter] of Object.entries(setters)) {
+        const next = result[name] || state[name];
+        currentRef.current[name] = next;
+        setter(next);
+      }
+      return result;
+    };
+    return window.navigator.locks?.request
+      ? window.navigator.locks.request("ismary-scheduling", run)
+      : Promise.resolve(run());
+  }
 
   const actions = useMemo(
     () => ({
@@ -46,32 +111,25 @@ export function ClinicaProvider({ children }) {
         setSession(null);
       },
       confirmWebRequest(requestId) {
-        // Ojo: no anidar setState aquí. Cada updater debe ser una función pura
-        // de su propio "prev" — React (Strict Mode) invoca los updaters dos
-        // veces para detectar impurezas, así que un setState anidado como
-        // efecto secundario se dispara doble y duplica datos.
-        const req = webRequests.find((r) => r.id === requestId);
-        if (!req) return;
-        setWebRequests((prev) => prev.filter((r) => r.id !== requestId));
-        setAppointments((prev) => [
-          ...prev,
-          {
-            id: `c-${requestId}`,
-            pacienteId: req.pacienteId,
-            fecha: req.fecha,
-            horaInicio: req.hora,
-            horaFin: req.hora,
-            tipo: req.tipo,
-            modalidad: req.modalidad,
-            estado: "confirmada",
-            ubicacion: req.modalidad,
-          },
-        ]);
+        return schedulingTransaction((state) => confirmRequest(state, requestId));
+      },
+      bookAppointment(payload) {
+        return schedulingTransaction((state) => prepareBooking(state, payload, { id: crypto.randomUUID(), today: HOY }));
       },
       updateAppointment(appointmentId, patch) {
-        setAppointments((prev) =>
-          prev.map((a) => (a.id === appointmentId ? { ...a, ...patch } : a))
-        );
+        return schedulingTransaction((state) => {
+          const old = state.appointments.find((a) => a.id === appointmentId);
+          if (!old) return { error: "Esta cita ya no está en la agenda." };
+          const next = { ...old, ...patch };
+          if (next.estado !== "cancelada") {
+            if (!validDate(next.fecha) || next.fecha < HOY || !Number.isFinite(minutesOfDay(next.horaInicio))
+              || !(minutesOfDay(next.horaFin) > minutesOfDay(next.horaInicio))) return { error: "Revisa la fecha y el horario de la cita." };
+            if (hasConflict({ ...state, fecha: next.fecha, hora: next.horaInicio, duracionMin: durationOf(next), ignoreAppointmentId: appointmentId })) {
+              return { error: "Ese horario coincide con otra cita o solicitud pendiente." };
+            }
+          }
+          return { appointments: state.appointments.map((a) => a.id === appointmentId ? next : a) };
+        });
       },
       updatePatient(patientId, patch) {
         setPatients((prev) =>
@@ -194,12 +252,12 @@ export function ClinicaProvider({ children }) {
         return patients.find((p) => p.rut.replace(/[.\-\s]/g, "").toLowerCase() === normalized);
       },
     }),
-    [patients, webRequests]
+    [patients]
   );
 
   const value = useMemo(
-    () => ({ patients, appointments, webRequests, documents, session, ...actions }),
-    [patients, appointments, webRequests, documents, session, actions]
+    () => ({ patients, appointments, webRequests, documents, session, config, setConfig, semanasPublicadas, setSemanasPublicadas, ...actions }),
+    [patients, appointments, webRequests, documents, session, config, semanasPublicadas, actions]
   );
 
   return <ClinicaContext.Provider value={value}>{children}</ClinicaContext.Provider>;

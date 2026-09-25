@@ -238,6 +238,7 @@ function SolicitudExamenes({ paciente, documents, consultaId, upsertDocument, em
   const [diagnostico, setDiagnostico] = useState(vigente?.diagnostico || "");
   const [justificacion, setJustificacion] = useState(vigente?.justificacion || "");
   const [observaciones, setObservaciones] = useState(vigente?.observaciones || "");
+  const [tipoEcografia, setTipoEcografia] = useState(vigente?.tipoEcografia || "");
   const [domicilioPaciente, setDomicilioPaciente] = useState(vigente?.domicilioPaciente || paciente.domicilio || "");
   const catalogo = configuracionTalonarios.examCatalog;
   const opcionesCatalogo = new Set(catalogo.flatMap((grupo) => grupo.exams));
@@ -249,10 +250,8 @@ function SolicitudExamenes({ paciente, documents, consultaId, upsertDocument, em
   }
 
   function handleGuardar(nuevoEstado) {
-    guardar(nuevoEstado, { items, otros, diagnostico, justificacion, observaciones, domicilioPaciente });
+    guardar(nuevoEstado, { items, otros, tipoEcografia, diagnostico, justificacion, observaciones, domicilioPaciente });
   }
-
-  const folio = vigente?.folio || "";
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter-desktop">
@@ -302,6 +301,13 @@ function SolicitudExamenes({ paciente, documents, consultaId, upsertDocument, em
           ))}
         </div>
 
+        {items.includes("Ecografía") && (
+          <label className="block space-y-1">
+            <span className="block font-label-lg text-label-lg text-on-surface font-medium">Tipo de ecografía</span>
+            <input disabled={bloqueado} maxLength={16} value={tipoEcografia} onChange={(e) => setTipoEcografia(e.target.value)} placeholder="Ej.: obstétrica, TV, mamaria" className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
+            <ContadorCaracteres value={tipoEcografia} max={16} />
+          </label>
+        )}
         <label className="block space-y-1">
           <span className="block font-label-lg text-label-lg text-on-surface font-medium">Otros exámenes (uno por línea)</span>
           <textarea disabled={bloqueado} value={otros} onChange={(e) => setOtros(e.target.value)} rows={2} className="w-full px-3 py-2 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
@@ -324,7 +330,7 @@ function SolicitudExamenes({ paciente, documents, consultaId, upsertDocument, em
           <textarea disabled={bloqueado} maxLength={80} value={observaciones} onChange={(e) => setObservaciones(e.target.value)} rows={2} className="w-full px-3 py-2 bg-surface-container-low rounded-lg text-body-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60" />
           <ContadorCaracteres value={observaciones} max={80} />
         </label>
-        <p className="text-body-sm text-on-surface-variant">El diagnóstico y la justificación quedan registrados en la ficha. En el talonario aparecen los exámenes y las observaciones.</p>
+        <p className="text-body-sm text-on-surface-variant">El diagnóstico y la justificación quedan registrados en la ficha. En el talonario se marcan las casillas preimpresas; los exámenes sin casilla, los otros exámenes y las observaciones se escriben en la línea «Otros».</p>
 
         {!bloqueado && (
           <>
@@ -356,11 +362,11 @@ function SolicitudExamenes({ paciente, documents, consultaId, upsertDocument, em
         tipo="exams"
         paciente={paciente}
         fechaDocumento={vigente?.fecha || HOY}
-        folio={folio}
         domicilio={domicilioPaciente}
         examenes={items}
         otros={otros}
         observaciones={observaciones}
+        tipoEcografia={tipoEcografia}
       />
     </div>
   );
@@ -411,7 +417,6 @@ function RecetaDigital({ paciente, documents, consultaId, upsertDocument, emitir
     guardar(nuevoEstado, { medicamentos, diagnostico, observaciones, domicilioPaciente });
   }
 
-  const folio = vigente?.folio || "";
   const prescripcion = medicamentos
     .filter((medicamento) => medicamento.dci.trim())
     .map((medicamento) => [medicamento.dci, medicamento.dosis, medicamento.posologia, medicamento.dias && `${medicamento.dias} días`].filter(Boolean).join(" · "))
@@ -510,7 +515,6 @@ function RecetaDigital({ paciente, documents, consultaId, upsertDocument, emitir
         tipo="recipe"
         paciente={paciente}
         fechaDocumento={vigente?.fecha || HOY}
-        folio={folio}
         domicilio={domicilioPaciente}
         diagnostico={diagnostico}
         prescripcion={prescripcion}

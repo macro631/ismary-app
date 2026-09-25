@@ -40,7 +40,7 @@ export default function LoginPage() {
         <div className="p-space-lg">
           <h1 className="font-headline-md text-headline-md text-primary text-center mb-1">Bienvenida</h1>
           <p className="font-body-sm text-body-sm text-on-surface-variant text-center mb-space-lg">
-            Ingresa a tu calendario y fichas clínicas
+            Acceso de demostración al calendario y las fichas del prototipo. No uses datos clínicos reales.
           </p>
 
           <form className="space-y-space-md" onSubmit={handleSubmit}>
@@ -62,14 +62,9 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="font-label-lg text-label-lg text-on-surface font-medium" htmlFor="claveProfesional">
-                  Contraseña
-                </label>
-                <a className="font-body-sm text-body-sm text-primary hover:underline" href="#">
-                  ¿Olvidaste tu contraseña?
-                </a>
-              </div>
+              <label className="font-label-lg text-label-lg text-on-surface font-medium" htmlFor="claveProfesional">
+                Contraseña de demostración
+              </label>
               <div className="relative flex items-center">
                 <span className="absolute left-3 text-on-surface-variant material-symbols-outlined text-[20px] pointer-events-none">key</span>
                 <input

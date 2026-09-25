@@ -62,7 +62,7 @@ export default function AppShell({ children }) {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/calendario")}
+              onClick={() => navigate("/citas/nueva")}
               className="hidden xl:flex items-center gap-2 bg-primary hover:bg-primary-strong text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm transition-all"
             >
               <span className="material-symbols-outlined text-[16px]">add</span>
@@ -92,6 +92,7 @@ export default function AppShell({ children }) {
 
         {mobileMenuOpen && (
           <nav className="xl:hidden border-t border-surface-container bg-surface-container-lowest px-margin py-space-sm flex flex-col">
+            <NavLink to="/citas/nueva" onClick={() => setMobileMenuOpen(false)} className="py-space-sm text-body-lg font-medium text-primary border-b border-surface-container">Nueva cita</NavLink>
             {NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.to}

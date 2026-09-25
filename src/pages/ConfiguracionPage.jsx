@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { addDays, formatRangeLabel, getWeekDates, weekStart } from "../utils/date";
-import { loadPublishedWeeks, savePublishedWeeks } from "../utils/availability";
+import { useClinica } from "../data/store";
 import { HOY, nowHHMM } from "../utils/today";
 
 const SEMANAS_A_MOSTRAR = 5;
@@ -8,31 +8,9 @@ const SEMANAS_A_MOSTRAR = 5;
 const DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const MODALIDADES = ["Box Clínico", "Domicilio", "Teleconsulta"];
 
-const DEFAULT_CONFIG = {
-  nombre: "Ismary Ugalde Rojas",
-  registroSis: "802617",
-  direccion: "Box Centro Médico, La Serena",
-  diasActivos: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"],
-  horaInicio: "08:30",
-  horaFin: "19:30",
-  modalidadesActivas: ["Box Clínico", "Domicilio", "Teleconsulta"],
-  timeoutInactividad: "20",
-  respaldoAutomatico: true,
-};
-
-function loadConfig() {
-  try {
-    const raw = window.localStorage.getItem("ismary_config");
-    return raw ? { ...DEFAULT_CONFIG, ...JSON.parse(raw) } : DEFAULT_CONFIG;
-  } catch {
-    return DEFAULT_CONFIG;
-  }
-}
-
 export default function ConfiguracionPage() {
-  const [config, setConfig] = useState(loadConfig);
+  const { config, setConfig, semanasPublicadas, setSemanasPublicadas } = useClinica();
   const [savedAt, setSavedAt] = useState(null);
-  const [semanasPublicadas, setSemanasPublicadas] = useState(loadPublishedWeeks);
 
   const semanas = useMemo(() => {
     const inicioPrimeraSemana = weekStart(HOY);
@@ -43,20 +21,11 @@ export default function ConfiguracionPage() {
   }, []);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem("ismary_config", JSON.stringify(config));
-    } catch {
-      // ignorar si localStorage no está disponible
-    }
     const t = setTimeout(() => {
       setSavedAt(nowHHMM());
     }, 500);
     return () => clearTimeout(t);
   }, [config]);
-
-  useEffect(() => {
-    savePublishedWeeks(semanasPublicadas);
-  }, [semanasPublicadas]);
 
   function toggleSemanaPublicada(lunes) {
     setSemanasPublicadas((prev) => ({ ...prev, [lunes]: !prev[lunes] }));
@@ -79,7 +48,7 @@ export default function ConfiguracionPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-headline-lg text-headline-lg text-primary">Configuración del Sistema</h1>
-          <p className="text-body-md text-on-surface-variant">Datos profesionales, disponibilidad y seguridad.</p>
+          <p className="text-body-md text-on-surface-variant">Datos profesionales y disponibilidad.</p>
         </div>
         {savedAt && (
           <span className="text-body-sm bg-surface-container-low text-text-primary/80 px-3 py-1.5 rounded-full border border-border-subtle/50 flex items-center gap-1.5">
@@ -186,30 +155,10 @@ export default function ConfiguracionPage() {
       </section>
 
       <section className="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
-        <h2 className="font-headline-sm text-headline-sm text-primary">Parámetros de respaldo y seguridad</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm items-end">
-          <label className="block space-y-1">
-            <span className="block font-label-lg text-label-lg text-on-surface font-medium">Cierre de sesión por inactividad</span>
-            <select
-              value={config.timeoutInactividad}
-              onChange={(e) => setConfig((c) => ({ ...c, timeoutInactividad: e.target.value }))}
-              className="w-full h-10 px-3 bg-surface-container-low rounded-lg text-body-md"
-            >
-              {["10", "15", "20", "30"].map((m) => (
-                <option key={m} value={m}>{m} minutos</option>
-              ))}
-            </select>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={config.respaldoAutomatico}
-              onChange={(e) => setConfig((c) => ({ ...c, respaldoAutomatico: e.target.checked }))}
-              className="w-4 h-4 accent-primary"
-            />
-            <span className="text-body-md text-on-surface">Respaldo automático diario activado</span>
-          </label>
-        </div>
+        <h2 className="font-headline-sm text-headline-sm text-primary">Seguridad y respaldos</h2>
+        <p className="text-body-md text-on-surface-variant">
+          Este prototipo guarda los cambios en este navegador. El inicio de sesión real, el cierre por inactividad y los respaldos automáticos requieren un servicio seguro antes de usar datos clínicos reales.
+        </p>
       </section>
     </div>
   );
