@@ -21,15 +21,17 @@
 .public-hero-content { position: relative; z-index: 1; }
 .public-hero h1 { max-width: 600px; margin-top: 23px; color: #552a3e; font: 600 clamp(40px, 4.3vw, 59px)/1.13 "Playfair Display", Georgia, serif; letter-spacing: -.035em; }
 .public-hero h1 em { display: block; margin-top: 4px; color: #9b5d72; font-weight: 400; }
-.public-intro { max-width: 515px; margin-top: 24px; color: #65565b; font: 400 16px/1.8 Inter, sans-serif; }
+.public-hero-slogan { max-width: 515px; margin-top: 22px; color: #6e2f4d; font: 600 18px/1.45 Inter, sans-serif; }
+.public-intro { max-width: 515px; margin-top: 13px; color: #65565b; font: 400 16px/1.8 Inter, sans-serif; }
 .public-hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 32px; }
 .public-button, .public-button-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 19px; min-height: 50px; padding: 12px 20px; border-radius: 9px; font: 600 13px/1.4 Montserrat, sans-serif; text-align: center; transition: background .2s, border-color .2s, transform .2s; }
 .public-button { background: #6e2f4d; color: #fff; }
 .public-button:hover { background: #542039; transform: translateY(-1px); }
 .public-button-secondary { border: 1px solid #c8afb8; color: #6e2f4d; background: #fffaf8; }
 .public-button-secondary:hover { background: #f9e9ef; border-color: #a7748a; }
-.public-hero-location { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 30px; color: #715e63; font-size: 12px; }
-.public-hero-location .material-symbols-outlined { font-size: 17px; color: #9b5d72; }
+.public-hero-location { display: flex; align-items: flex-start; gap: 6px; margin-top: 30px; color: #715e63; font-size: 12px; }
+.public-hero-location .material-symbols-outlined { flex: none; font-size: 17px; color: #9b5d72; }
+.public-hero-location > span:last-child { flex: 1; min-width: 0; }
 .public-hero-visual { position: relative; display: flex; justify-content: center; align-items: center; min-height: 460px; }
 .public-hero-frame { position: relative; width: min(100%, 352px); height: 450px; overflow: hidden; border-radius: 190px 190px 20px 20px; background: #fff9f4; border: 1px solid #dec9ca; box-shadow: 18px 16px 0 #ecd9dc; }
 .public-hero-frame::before { content: ""; position: absolute; inset: 11px; border: 1px solid #d6b8b9; border-radius: 180px 180px 12px 12px; pointer-events: none; }
@@ -47,6 +49,7 @@
 .public-section-heading > p { max-width: 360px; color: #6e5f63; font-size: 14px; line-height: 1.7; }
 .public-services { scroll-margin-top: 28px; }
 .public-services-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.public-service-note { margin-top: 16px; color: #796b6e; font-size: 12px; line-height: 1.6; }
 .service-card { display: flex; flex-direction: column; min-height: 285px; height: 100%; padding: 25px 27px 22px; border: 1px solid #e8dedb; border-radius: 14px; background: #fff; transition: border-color .2s, box-shadow .2s, transform .2s; }
 .service-card:hover { border-color: #d4b6c1; box-shadow: 0 13px 30px #6e2f4d0d; transform: translateY(-2px); }
 .service-card-selected { border-color: #7a2e50; background: #fdf8f9; box-shadow: 0 0 0 1px #7a2e50; }

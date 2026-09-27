@@ -166,8 +166,8 @@ export default function PortalReservaPage() {
       <aside className="booking-aside">
         <Link to="/" className="booking-back">← Volver a la presentación</Link>
         <p className="public-eyebrow">RESERVA EN LÍNEA</p>
-        <p className="booking-aside-title">Un momento para cuidar de ti.</p>
-        <p className="booking-aside-description">Elige la atención y el horario que mejor se ajustan a lo que necesitas. Puedes avanzar a tu ritmo.</p>
+        <p className="booking-aside-title">Elige prestación y horario.</p>
+        <p className="booking-aside-description">Puedes solicitar un control posparto, asesoría de lactancia, control prenatal o una consulta de salud sexual. Comienza ingresando tu RUT.</p>
         <div className="booking-demo-note"><strong>Vista de demostración</strong><span>Las solicitudes se guardan solo en este navegador. Para coordinar una atención real, escribe a <a href="https://www.instagram.com/ismary.mt/" target="_blank" rel="noreferrer">@ismary.mt</a>.</span></div>
       </aside>
       <div className="booking-workspace">
@@ -180,7 +180,7 @@ export default function PortalReservaPage() {
           <>
             <h1 className="font-headline-md text-headline-md text-primary mb-1">Reserva tu hora</h1>
             <p className="text-body-sm text-on-surface-variant mb-space-md">
-              Ingresa tu RUT para comenzar. Así podemos reconocerte si ya eres paciente de Ismary.
+              Ingresa tu RUT para buscar una ficha existente y evitar un registro duplicado.
             </p>
             <form onSubmit={handleRutSubmit} className="space-y-space-sm">
               <RutInput
@@ -241,6 +241,7 @@ export default function PortalReservaPage() {
               <span className="material-symbols-outlined text-[16px]">arrow_back</span> Cambiar datos
             </button>
             <h1 className="font-headline-md text-headline-md text-primary mb-space-sm">Selecciona el servicio</h1>
+            <p className="text-body-sm text-on-surface-variant mb-space-md">Los precios mostrados son orientativos y deben confirmarse antes de una atención real.</p>
             <div className="flex flex-col gap-space-sm">
               {SERVICIOS.map((s, index) => (
                 <button
@@ -263,7 +264,7 @@ export default function PortalReservaPage() {
             </button>
             <h1 className="font-headline-md text-headline-md text-primary mb-1">¿Cómo prefieres tu atención?</h1>
             <p className="text-body-sm text-on-surface-variant mb-space-md">{servicio.nombre}</p>
-            {modalidadesDisponibles.length === 0 && <p className="text-body-sm text-status-pendiente mb-4">No hay modalidades habilitadas para este servicio. Puedes elegir otra atención o escribir a @ismary.mt.</p>}
+            {modalidadesDisponibles.length === 0 && <p className="text-body-sm text-status-pendiente mb-4">No hay modalidades habilitadas para este servicio. Puedes elegir otra atención o consultar por Instagram.</p>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
               {modalidadesDisponibles.map((key) => {
                 const m = MODALIDADES[key];
@@ -300,7 +301,7 @@ export default function PortalReservaPage() {
               <div className="flex items-start gap-2 bg-status-pendiente-bg text-status-pendiente rounded-lg p-space-md mb-space-md">
                 <span className="material-symbols-outlined text-[20px] shrink-0">event_busy</span>
                 <p className="text-body-sm">
-                  No hay horarios disponibles para esta atención en las próximas semanas. Puedes cambiar de modalidad o escribir a @ismary.mt para coordinar.
+                  No hay horarios disponibles para esta atención en las próximas semanas. Puedes cambiar de modalidad o consultar por Instagram.
                 </p>
               </div>
             ) : (
@@ -335,7 +336,7 @@ export default function PortalReservaPage() {
               <div className="flex items-start gap-2 bg-status-pendiente-bg text-status-pendiente rounded-lg p-space-sm mb-space-md">
                 <span className="material-symbols-outlined text-[18px] shrink-0">schedule</span>
                 <p className="text-body-sm">
-                  Comprobaremos la disponibilidad al enviar. Tu solicitud quedará pendiente de confirmación por Ismary.
+                  Comprobaremos la disponibilidad al enviar. La solicitud quedará pendiente de revisión.
                 </p>
               </div>
             )}

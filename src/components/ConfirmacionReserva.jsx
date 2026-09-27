@@ -9,7 +9,7 @@ export default function ConfirmacionReserva({ solicitud }) {
       <div className="w-14 h-14 rounded-full bg-brand-soft text-primary flex items-center justify-center mb-5"><span className="material-symbols-outlined text-[30px]" aria-hidden="true">pending_actions</span></div>
       <p className="text-label-lg font-semibold text-status-pendiente mb-2">Pendiente de confirmación</p>
       <h1 className="font-headline-lg text-headline-lg text-primary">Solicitud guardada en esta demostración</h1>
-      <p className="text-body-md text-on-surface-variant mt-3 leading-relaxed">La solicitud quedó guardada solo en este navegador. Para coordinar una atención real, escribe a @ismary.mt. Espera una confirmación directa de Ismary antes de asistir.</p>
+      <p className="text-body-md text-on-surface-variant mt-3 leading-relaxed">La solicitud quedó guardada solo en este navegador. Para coordinar una atención real, usa el enlace de Instagram. Espera una confirmación directa antes de asistir.</p>
       <dl className="grid sm:grid-cols-2 gap-4 p-5 my-6 bg-[#fffaf3] border border-border-subtle rounded-xl text-body-sm">
         <div className="sm:col-span-2"><dt className="text-on-surface-variant">Atención</dt><dd className="mt-1 font-semibold">{solicitud.tipo}</dd></div>
         <div><dt className="text-on-surface-variant">Fecha solicitada</dt><dd className="mt-1 font-semibold">{formatLongDate(solicitud.fecha)} de {solicitud.fecha.slice(0, 4)}</dd></div>
